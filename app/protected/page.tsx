@@ -3,12 +3,17 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import LazyMap from "@/components/Map/LazyMap";
 import NavBar from "@/components/NavBar";
-import { CollapsibleEvents, CollapsibleInsights, TabsClubsEvents } from "@/components/Map-Overlay";
+import {
+  CollapsibleEvents,
+  CollapsibleInsights,
+  TabsClubsEvents,
+} from "@/components/Map-Overlay";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { DrawerDemo } from "./drawer";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -35,9 +40,9 @@ export default async function ProtectedPage() {
           <ResizablePanel defaultSize={75}>
             <div className="relative h-full">
               <div className="flex flex-col gap-5 absolute top-5 left-5 z-50 text-black text-xl">
-                  <CollapsibleInsights />
-                  <CollapsibleEvents />
-                  <TabsClubsEvents />
+                <CollapsibleInsights />
+                <CollapsibleEvents />
+                <TabsClubsEvents />
               </div>
               <div className="absolute inset-0 z-0">
                 <LazyMap />
