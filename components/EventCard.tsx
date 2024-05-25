@@ -22,8 +22,8 @@ export default function EventCard({
   end,
 }) {
   return (
-    <Card className="w-full">
-      <Image src={image} alt="event image" width={200} />
+    <Card className="w-full mb-3">
+      <Image src={image} alt="event image" className="rounded-lg"/>
       <div className="ml-5 flex flex-row items-center">
         <div className="h-20 w-16 bg-slate-800 rounded-lg items-center flex flex-col justify-center">
           <h2 className="text-lg font-semibold">{day}</h2>

@@ -18,14 +18,15 @@ import { Label } from "@/components/ui/label";
 import { Send } from 'lucide-react';
 import ctc from "../app/ctc_logo.png";
 import hack from "../app/hack-at-uci-logo_black.png";
+import humanities from "../app/humanities.jpg"
 import Image from 'next/image';
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import EventCard from "./EventCard";
  
 const frameworks = [
   {
@@ -68,7 +69,7 @@ export function CheckBox() {
 
 function ClubCards({ image, text, description }) {
     return (
-      <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-2">
+      <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3">
         <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1'>
             {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
         </div>
@@ -80,7 +81,7 @@ function ClubCards({ image, text, description }) {
     );
 }
 
-export function ScrollAreaCards() {
+export function ScrollAreaClubs() {
   return (
     <ScrollArea className="w-full rounded-md h-5/6 pb-36">
           <ClubCards
@@ -146,6 +147,44 @@ export function ScrollAreaCards() {
     </ScrollArea>
   );
 }
+
+export function ScrollAreaEvents() {
+  return (
+    <ScrollArea className="w-full rounded-md h-5/6 pb-36">
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+    </ScrollArea>
+  );
+}
+
 
 export function InputWithButton() {
   return (
@@ -234,32 +273,20 @@ export function TabsClubsEvents() {
             <CheckBox />
           </CardHeader>
           <CardContent className="h-screen">
-            <ScrollAreaCards />
+            <ScrollAreaClubs />
           </CardContent>
         </Card>
       </TabsContent>
 
-      <TabsContent value="password">
-        <Card>
+      <TabsContent value="password" className="h-full">
+        <Card className="h-screen">
           <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
+            <InputWithButton />
+            <CheckBox />
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
+          <CardContent className="h-screen">
+            <ScrollAreaEvents />
           </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
         </Card>
       </TabsContent>
     </Tabs>
