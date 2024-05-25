@@ -70,7 +70,7 @@ export default function NavBar() {
       </div>
       <Link href="/" className="py-6"><ButtonIcon /></Link>
       <Link href="#" className="py-6"><UserIcon /></Link>
-      <Link href="https://calendar.google.com/" className="py-6"><MapIcon /></Link>
+      <Link href="https://calendar.google.com/" target = '_blank' className="py-6"><MapIcon /></Link>
       <Link href="#" className="py-6"><CalIcon /></Link>
       <Link href="#" className="py-6"><AuthButton /></Link>
       <div className="mt-auto flex flex-col items-center">
