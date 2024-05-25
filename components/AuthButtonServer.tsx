@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 function LogoutIcon({className}:any) {
   return (
-  <Button variant="outline" size="icon" className={cn(className)}>
-      <MoveLeft className="h-8 w-8" />
+  <Button variant="ghost" size="icon" className={cn(className)}>
+      <MoveLeft className="h-8 w-8 dark:hover:bg-red-400 duration-300 rounded-sm" />
   </Button>
   )
 }

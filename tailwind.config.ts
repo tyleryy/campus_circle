@@ -72,6 +72,10 @@ const config = {
           to: {
             transform: "translate(calc(-50% - 0.5rem))",
           },
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
         },
         "accordion-down": {
           from: { height: "0" },
@@ -96,6 +100,7 @@ const config = {
         aurora: "aurora 60s linear infinite",
         scroll:
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
+        'fade-in': 'fadeIn 0.5s ease-in-out',
       },
     },
   },

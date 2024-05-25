@@ -4,6 +4,7 @@ import { InfiniteMovingCards } from "@/components/infinite-cards";
 import { GlobeDemo } from "./Globe";
 import { CardHoverEffectDemo } from "./InfoCards";
 import { AuroraBackgroundDemo } from "./Aurora";
+import Footer from "@/components/Footer";
 
 const cardConfig = [
   {
@@ -62,6 +63,7 @@ const LandingPage: React.FC = () => {
       <div className="w-full">
         <GlobeDemo />
       </div>
+      <Footer />
     </main>
   );
 };
