@@ -9,6 +9,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { DrawerDemo } from "./drawer";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -24,23 +25,25 @@ export default async function ProtectedPage() {
   return (
     <main className="flex flex-col justify-center items-center h-screen">
       <div className="h-full w-full">
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="border"
-        >
-        <ResizablePanel defaultSize={5}>
-          <div className="flex h-full items-center justify-center">
-            <span className="font-semibold"></span>
-            <NavBar />
-          </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={75}>
-          <div className="flex h-full items-center justify-center">
-            <LazyMap />
-          </div>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        <ResizablePanelGroup direction="horizontal" className="border">
+          <ResizablePanel defaultSize={5}>
+            <div className="flex h-full items-center justify-center">
+              <span className="font-semibold"></span>
+              <NavBar />
+            </div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={75}>
+            <div className="flex h-full items-center justify-center relative">
+              <div className="-z-30">
+                <LazyMap />
+              </div>
+              <div className="absolute right-0 bottom-0 z-50">
+                <DrawerDemo />
+              </div>
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </main>
   );
