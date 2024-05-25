@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import ctc from "../app/ctc_logo.png";
-import logo from "../app/campus_circle_logo.png";
+import hack from "../app/hack-at-uci-logo_black.png";
 import Image from 'next/image';
 
 
@@ -23,22 +23,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-
- 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
  
 const frameworks = [
   {
@@ -63,6 +48,8 @@ const frameworks = [
   },
 ]
 import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
+
  
 export function CheckBox() {
   return (
@@ -81,10 +68,10 @@ export function CheckBox() {
 function ClubCards({ image, text, description }) {
     return (
       <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center">
-        <div className='h-20 w-20 bg-neutral-100 rounded-lg items-center flex'>
+        <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex'>
             {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
         </div>
-        <div className='ml-2 text-neutral-100 flex-col'>
+        <div className='ml-5 text-neutral-100 flex-col'>
           <h3 className="text-lg font-semibold">{text}</h3>
           <p className="text-sm text-gray-600">{description}</p>
         </div>
@@ -93,52 +80,7 @@ function ClubCards({ image, text, description }) {
   }
  
 export function TextArea() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
- 
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[300px] justify-between"
-        >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Type a command or search..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
-            {frameworks.map((framework) => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setOpen(false)
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                {framework.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
+    return <Textarea placeholder="Type a command or search..." />
 }
 
 export function CollapsibleInsights() {
@@ -226,9 +168,9 @@ export function CollapsibleEvents() {
                     description="Building tech with purpose."
                 />
                 <ClubCards
-                    image={logo.src}
-                    text="Commit the Change"
-                    description="Building tech with purpose."
+                    image={hack.src}
+                    text="Hack at UCI"
+                    description="Promoting hacker culture."
                 />
             </CardContent>
           </Card>
