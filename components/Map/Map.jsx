@@ -88,7 +88,7 @@ export default function Map() {
       zoom={17}
       minZoom={15}
       scrollWheelZoom={true}
-      style={{ height: "1000px", width: "5000px" }}
+      style={{ height: "1250px", width: "5000px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
