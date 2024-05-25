@@ -69,7 +69,7 @@ export function CheckBox() {
 
 function ClubCards({ image, text, description }) {
     return (
-      <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3">
+      <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
         <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1'>
             {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
         </div>
