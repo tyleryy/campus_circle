@@ -74,3 +74,13 @@ async def get_events():
         return {"status": "ok", "events": list(records)}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+    
+
+@app.get("/api/clubs")
+async def get_events():
+    try:
+        query = "MATCH (e:Club) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}

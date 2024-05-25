@@ -139,8 +139,9 @@ export default function Map() {
       center={[33.6461, -117.8427]}
       zoom={17}
       minZoom={15}
-      scrollWheelZoom={true}
-      style={{ height: "1250px", width: "5000px" }}
+      scrollWheelZoom={false}
+      zoomControl={false}
+      style={{ height: "1000px", width: "5000px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
