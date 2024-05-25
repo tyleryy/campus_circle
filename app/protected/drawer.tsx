@@ -52,12 +52,12 @@ import Link from "next/link";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   description: z.string().min(2).max(50),
-  date: z.string(),
+  date: z.date(),
   startTime: z.string(),
   endTime: z.string(),
   location: z.string(),
-  longitude: z.string(),
-  latitude: z.string(),
+  longitude: z.number(),
+  latitude: z.number(),
   eventType: z.string(),
 });
 
@@ -67,6 +67,14 @@ export function DrawerDemo() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
+      date: new Date(),
+      startTime: "",
+      endTime: "",
+      location: "",
+      longitude: 0.0,
+      latitude: 0.0,
+      eventType: "",
     },
   });
 
@@ -75,6 +83,14 @@ export function DrawerDemo() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+  }
+
+  function formatDate(date) {
+    let month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    let day = String(date.getDate()).padStart(2, "0");
+    let year = date.getFullYear();
+
+    return `${month}-${day}-${year}`;
   }
 
   return (
@@ -198,7 +214,7 @@ export function DrawerDemo() {
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Date of birth</FormLabel>
+                    <FormLabel>Event Date</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
