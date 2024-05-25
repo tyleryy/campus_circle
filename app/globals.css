@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* .leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: invert(100%);
+} */
+
 @layer base {
   :root {
     --background: 0 0% 100%;
