@@ -83,7 +83,7 @@ function ClubCards({ image, text, description }) {
 
 export function ScrollAreaClubs() {
   return (
-    <ScrollArea className="w-full rounded-md h-5/6 pb-36">
+    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
           <ClubCards
               image={ctc.src}
               text="Commit the Change"
@@ -150,7 +150,7 @@ export function ScrollAreaClubs() {
 
 export function ScrollAreaEvents() {
   return (
-    <ScrollArea className="w-full rounded-md h-5/6 pb-36">
+    <ScrollArea className="w-full rounded-md h-[500px] pb-36">
       <EventCard
         image={humanities}
         day="25"
@@ -266,13 +266,13 @@ export function TabsClubsEvents() {
         <TabsTrigger value="account" className='font-semibold'>Clubs</TabsTrigger>
         <TabsTrigger value="password" className='font-semibold'>Events</TabsTrigger>
       </TabsList>
-      <TabsContent value="account" className="h-full">
-        <Card className="h-screen">
+      <TabsContent value="account" className="">
+        <Card className="h-[800px]">
           <CardHeader>
             <InputWithButton />
             <CheckBox />
           </CardHeader>
-          <CardContent className="h-screen">
+          <CardContent className="">
             <ScrollAreaClubs />
           </CardContent>
         </Card>
