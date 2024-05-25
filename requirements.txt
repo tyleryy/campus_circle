@@ -1,0 +1,6 @@
+fastapi
+pydantic
+uvicorn[standard]
+supabase
+python-dotenv
+neo4j
