@@ -34,7 +34,7 @@ export default async function ProtectedPage() {
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={75}>
             <div className="relative h-full">
-              <div className="flex flex-col gap-5 absolute top-5 left-5 z-50 text-black text-xl">
+              <div className="flex flex-col gap-5 absolute top-5 left-5 z-50 text-black">
                   <CollapsibleInsights />
                   <CollapsibleEvents />
                   <TabsClubsEvents />
