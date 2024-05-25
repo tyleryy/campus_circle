@@ -64,4 +64,23 @@ async def create_user(user: User):
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
+        return {"status": "error", "error": str(e)} 
+    
+@app.get("/api/events")
+async def get_events():
+    try:
+        query = "MATCH (e:Event) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+
+@app.get("/api/clubs")
+async def get_events():
+    try:
+        query = "MATCH (e:Club) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
         return {"status": "error", "error": str(e)}
