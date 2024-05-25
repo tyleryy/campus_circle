@@ -35,11 +35,8 @@ export default async function ProtectedPage() {
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={75}>
             <div className="flex h-full items-center justify-center relative">
-              <div className="-z-30">
+              <div>
                 <LazyMap />
-              </div>
-              <div className="absolute right-0 bottom-0 z-50">
-                <DrawerDemo />
               </div>
             </div>
           </ResizablePanel>
