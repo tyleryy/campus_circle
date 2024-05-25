@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
+
 load_dotenv(verbose=True)
 
 url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
@@ -14,14 +15,10 @@ NEO_4J_USER = os.getenv("NEXT_PUBLIC_NEO_4J_USERNAME")
 NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
 
 
-db: Client = create_client(url, key) 
+db: Client = create_client(url, key)
 NEO_4J_URI = os.getenv("NEXT_PUBLIC_NEO_4J_URI")
 NEO_4J_USER = os.getenv("NEXT_PUBLIC_NEO_4J_USERNAME")
 NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
-
-with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
-    driver.verify_connectivity()
-
 
 with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
     driver.verify_connectivity()
@@ -36,17 +33,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class User(BaseModel):
     email: str
     password: str
     user_type: str  # 'club' or 'student'
 
+
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
-    response = db.table('notes').select('*').execute()
-    records, summary, keys = driver.execute_query("MATCH (s:Student)-[r]->(m) return s,r,m", database="neo4j")
-    return {"status": "ok", "notes": response, "exists": not (db == None), "graph data": list(records) }
+    response = db.table("notes").select("*").execute()
+    records, summary, keys = driver.execute_query(
+        "MATCH (s:Student)-[r]->(m) return s,r,m", database="neo4j"
+    )
+    return {
+        "status": "ok",
+        "notes": response,
+        "exists": not (db == None),
+        "graph data": list(records),
+    }
+
 
 @app.post("/api/create-user")
 async def create_user(user: User):
@@ -54,8 +61,7 @@ async def create_user(user: User):
     try:
         query = f"CREATE (s:{role} {{email: '{user.email}', password: '{user.password}', user_points: 0}})\
                     RETURN s"
-        records,_,_ = driver.execute_query(query, database="neo4j")
+        records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)} 
-
+        return {"status": "error", "error": str(e)}

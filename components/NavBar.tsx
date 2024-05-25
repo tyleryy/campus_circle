@@ -60,8 +60,8 @@ function SettingsIcon() {
 export default function NavBar() {
   const { day, month } = getCurrentDayAndMonth();
   return (
-    <nav className="h-full w-full bg-slate-900 text-neutral-200 flex flex-col items-center">
-      <Link href="/" className="pt-12 pb-6">
+    <nav className="h-full w-full bg-slate-800 text-neutral-200 flex flex-col items-center">
+      <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
       </Link>
       <div className="py-6 text-lg flex flex-col items-center">
