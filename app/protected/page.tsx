@@ -3,12 +3,17 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import LazyMap from "@/components/Map/LazyMap";
 import NavBar from "@/components/NavBar";
-import { CollapsibleEvents, CollapsibleInsights, TabsClubsEvents } from "@/components/Map-Overlay";
+import {
+  CollapsibleEvents,
+  CollapsibleInsights,
+  TabsClubsEvents,
+} from "@/components/Map-Overlay";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { DrawerDemo } from "./drawer";
 
 export default async function ProtectedPage() {
   const supabase = createClient();

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -55,7 +55,7 @@ import { Textarea } from "@/components/ui/textarea";
 export function CheckBox() {
   return (
     <div className="flex items-center pt-2 space-x-2">
-      <Checkbox id="terms"/>
+      <Checkbox id="terms" />
       <label
         htmlFor="terms"
         className="text-sm font-light leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
