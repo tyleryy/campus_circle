@@ -4,6 +4,7 @@ import { InfiniteMovingCards } from "@/components/infinite-cards";
 import { GlobeDemo } from "./Globe";
 import { CardHoverEffectDemo } from "./InfoCards";
 import { AuroraBackgroundDemo } from "./Aurora";
+import Footer from "@/components/Footer";
 
 const cardConfig = [
   {
@@ -38,7 +39,7 @@ const LandingPage: React.FC = () => {
       <div className="w-full h-full">
         <AuroraBackgroundDemo />
       </div>
-      <h1>Landing Page</h1>
+      <h1 className='md:text-4xl dark:text-neutral-200'>Landing Page</h1>
       <div>
         <InfiniteMovingCards
           items={cardConfig}
@@ -52,12 +53,6 @@ const LandingPage: React.FC = () => {
           pauseOnHover
           direction="left"
         />
-        <InfiniteMovingCards
-          items={cardConfig}
-          speed="slow"
-          pauseOnHover
-          direction="right"
-        />
       </div>
       <div>
         <CardHoverEffectDemo />
@@ -68,6 +63,7 @@ const LandingPage: React.FC = () => {
       <div className="w-full">
         <GlobeDemo />
       </div>
+      <Footer />
     </main>
   );
 };
