@@ -207,6 +207,20 @@ export function DrawerDemo() {
                   </FormItem>
                 )}
               />
+              {/* EndTime */}
+              <FormField
+                control={form.control}
+                name="endTime"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>End Time</FormLabel>
+                    <FormControl>
+                      <Input placeholder="11:00 AM - 5:00 PM" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Date */}
               <FormField
