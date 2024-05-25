@@ -242,10 +242,8 @@ export function TabsClubsEvents() {
       <TabsContent value="password">
         <Card>
           <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
+            <InputWithButton />
+            <CheckBox />
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
