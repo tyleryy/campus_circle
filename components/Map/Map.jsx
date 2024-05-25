@@ -1,14 +1,7 @@
 "use client";
 
 // START: Preserve spaces to avoid auto-sorting
-import {
-  useState,
-  useRef,
-  useMemo,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 
 import "leaflet/dist/leaflet.css";
 
@@ -16,7 +9,15 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 import "leaflet-defaulticon-compatibility";
 
-import { dragIcon } from "./MapIcons";
+import {
+  dragIcon,
+  ping0Icon,
+  ping1Icon,
+  ping2Icon,
+  ping3Icon,
+  ping4Icon,
+  ping5Icon,
+} from "./MapIcons";
 
 // END: Preserve spaces to avoid auto-sorting
 import {
@@ -31,6 +32,57 @@ export default function Map() {
   const centerPosition = { lat: 33.6461, lng: -117.8427 };
   const [isEdit, setIsEdit] = useState(true);
   const [position, setPosition] = useState(centerPosition);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
+  }, []);
+
+  function generatePingIcon(date) {
+    const currentDate = new Date();
+    const targetDate = new Date(date);
+    const timeDiff = Math.abs(targetDate.getTime() - currentDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    if (dayDiff === 0) {
+      return ping0Icon;
+    } else if (dayDiff === 1) {
+      return ping1Icon;
+    } else if (dayDiff === 2) {
+      return ping2Icon;
+    } else if (dayDiff === 3) {
+      return ping3Icon;
+    } else if (dayDiff === 4) {
+      return ping4Icon;
+    } else if (dayDiff === 5) {
+      return ping5Icon;
+    } else {
+      return ping5Icon; // or any default icon for days further away
+    }
+  }
+
+  const allMarkers = events.map((event) => {
+    return (
+      <Marker
+        key={event.id}
+        position={[event.lat, event.long]}
+        // eventHandlers={{
+        //   click: () => {
+        //     onOpen();
+        //     setItemData(item);
+        //     setFocusLocation(item.location);
+        //   },
+        // }}
+        icon={generatePingIcon(event.date)}
+      ></Marker>
+    );
+  });
 
   const markerRef = useRef(null);
 
@@ -87,7 +139,7 @@ export default function Map() {
       center={[33.6461, -117.8427]}
       zoom={17}
       minZoom={15}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       style={{ height: "1000px", width: "5000px" }}
     >
       <TileLayer
@@ -96,7 +148,7 @@ export default function Map() {
         // Light Mode: "https://api.mapbox.com/styles/v1/ghosnm/cl2jlyr3t002b14kvqib2s4ax/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZ2hvc25tIiwiYSI6ImNrenE2eTZqcjM1N2oyb3FyeXBkaGwzMHoifQ.Y1Fk71N1-mAY4AAmXHAt6Q"
         // Dark Mode:  "https://api.mapbox.com/styles/v1/ghosnm/ckzq73c69001414nve9hlcx9d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZ2hvc25tIiwiYSI6ImNrenE2eTZqcjM1N2oyb3FyeXBkaGwzMHoifQ.Y1Fk71N1-mAY4AAmXHAt6Q"
       />
-
+      {allMarkers}
       <NewItemMarker />
     </MapContainer>
   );
