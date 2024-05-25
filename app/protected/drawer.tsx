@@ -8,6 +8,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { Plus } from "lucide-react";
+import { Label } from "@/components/ui/label";
+
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -65,8 +68,17 @@ export function DrawerDemo() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+        <div className="flex flex-row">
+          <div className="bg-slate-700 p-3 rounded-sm gap-5 flex items-center w-2/3">
+            <Button variant="outline">
+              <Plus />
+            </Button>
+            <Label>Create Event</Label>
+          </div>
+        </div>
       </DrawerTrigger>
+
+      {/* Drawer content */}
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm z-50">
           <DrawerHeader>
