@@ -53,4 +53,4 @@ async def create_user(user: User):
         records,_,_ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return {"status": "error", "error": str(e)} 
