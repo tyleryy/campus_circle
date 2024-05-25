@@ -38,7 +38,7 @@ const LandingPage: React.FC = () => {
       <div className="w-full h-full">
         <AuroraBackgroundDemo />
       </div>
-      <h1>Landing Page</h1>
+      <h1 className='md:text-4xl dark:text-neutral-200'>Landing Page</h1>
       <div>
         <InfiniteMovingCards
           items={cardConfig}
@@ -51,12 +51,6 @@ const LandingPage: React.FC = () => {
           speed="slow"
           pauseOnHover
           direction="left"
-        />
-        <InfiniteMovingCards
-          items={cardConfig}
-          speed="slow"
-          pauseOnHover
-          direction="right"
         />
       </div>
       <div>
