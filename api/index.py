@@ -3,12 +3,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from dotenv import load_dotenv
+from neo4j import GraphDatabase
 load_dotenv(verbose=True)
 
 url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
 key = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 db: Client = create_client(url, key) 
+NEO_4J_URI = os.getenv("NEXT_PUBLIC_NEO_4J_URI")
+NEO_4J_USER = os.getenv("NEXT_PUBLIC_NEO_4J_USERNAME")
+NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
 
+
+with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
+    driver.verify_connectivity()
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -19,9 +26,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
     response = db.table('notes').select('*').execute()
-    return {"status": "ok", "notes": response, "exists": not (db == None)}
+    records, summary, keys = driver.execute_query("MATCH (s:Student)-[r]->(m) return s,r,m", database="neo4j")
+    return {"status": "ok", "notes": response, "exists": not (db == None), "graph data": list(records) }
+
