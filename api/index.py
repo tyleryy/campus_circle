@@ -5,9 +5,7 @@ from pydantic import BaseModel
 from supabase import create_client, Client
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
-
-load_dotenv()
-
+load_dotenv(verbose=True)
 
 url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
 key = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
@@ -17,10 +15,16 @@ NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
 
 
 db: Client = create_client(url, key) 
+NEO_4J_URI = os.getenv("NEXT_PUBLIC_NEO_4J_URI")
+NEO_4J_USER = os.getenv("NEXT_PUBLIC_NEO_4J_USERNAME")
+NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
 
 with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
     driver.verify_connectivity()
 
+
+with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
+    driver.verify_connectivity()
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -54,3 +58,4 @@ async def create_user(user: User):
         return {"status": "ok", "user": records[0]}
     except Exception as e:
         return {"status": "error", "error": str(e)} 
+
