@@ -140,6 +140,7 @@ export default function Map() {
       zoom={17}
       minZoom={15}
       scrollWheelZoom={false}
+      zoomControl={false}
       style={{ height: "1000px", width: "5000px" }}
     >
       <TileLayer

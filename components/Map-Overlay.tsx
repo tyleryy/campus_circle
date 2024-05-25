@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -70,15 +71,21 @@ function ClubCards({ image, text, description }) {
           <Image
             width={100}
             height={100}
-            src={image}
+            src={image.src}
             alt="Card"
             className="rounded-lg p-1 w-20 bg-neutral-100"
           />
         )}
       </div>
       <div className="ml-5 text-neutral-100 flex-col">
-        <h3 className="text-lg font-semibold">{text}</h3>
-        <p className="text-sm text-gray-600">{description}</p>
+        <h3 className="text-lg font-semibold overflow-ellipsis overflow-hidden">
+          {text.length > 25 ? `${text.slice(0, 25)}...` : text}
+        </h3>
+        <p className="text-sm text-gray-600 overflow-ellipsis overflow-hidden">
+          {description.length > 25
+            ? `${description.slice(0, 25)}...`
+            : description}
+        </p>
       </div>
     </div>
   );
@@ -155,6 +162,26 @@ export function CollapsibleEvents() {
 }
 
 export function TabsClubsEvents() {
+  const [clubs, setClubs] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/clubs`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setClubs(flattenedEvents);
+    };
+    fetchData();
+  }, []);
+
+  console.log(clubs);
+  const allClubs: JSX.Element[] = clubs.map((club) => (
+    <ClubCards
+      image={club.image_url}
+      text={club.name}
+      description={club.club_description}
+    />
+  ));
+
   return (
     <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">
@@ -171,18 +198,7 @@ export function TabsClubsEvents() {
             <TextArea />
             <CheckBox />
           </CardHeader>
-          <CardContent className="space-y-2">
-            <ClubCards
-              image={ctc.src}
-              text="Commit the Change"
-              description="Building tech with purpose."
-            />
-            <ClubCards
-              image={hack.src}
-              text="Hack at UCI"
-              description="Promoting hacker culture."
-            />
-          </CardContent>
+          <CardContent className="space-y-2">{allClubs}</CardContent>
         </Card>
       </TabsContent>
 
