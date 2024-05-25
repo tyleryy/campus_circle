@@ -31,9 +31,11 @@ export default function Login({
   const signUp = async (formData: FormData) => {
     "use server";
 
-    const origin = headers().get("origin");
+    const origin = headers().get("origin"); // get baseurl
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const userType = formData.get("userType") as string;
+    const role = userType === "club" ? "club" : "student";
     const supabase = createClient();
 
     const { error } = await supabase.auth.signUp({
@@ -41,6 +43,9 @@ export default function Login({
       password,
       options: {
         emailRedirectTo: `${origin}/auth/callback`,
+        data: {
+          role,
+        },
       },
     });
 
@@ -48,7 +53,7 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    // return redirect("/login?message=Check email to continue sign in process");
   };
 
   return (
