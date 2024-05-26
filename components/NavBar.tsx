@@ -82,20 +82,23 @@ export default function NavBar() {
   const { day, month } = getCurrentDayAndMonth();
 
   const supabase = createClient();
-  const [user, setUser] = useState(null);
-
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    if (supabase) {
-      const { user }: any = supabase.auth.getUser();
-      setUser(user);
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  return user?.user_metadata.role === "student" ? (
+  return session?.user.user_metadata?.role === "student" ? (
     <nav className="h-full w-full bg-slate-800 text-neutral-200 flex flex-col items-center">
       <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
@@ -138,7 +141,8 @@ export default function NavBar() {
               Student
             </PopoverTrigger>
             <PopoverContent>
-              Hey, {user?.email}! You are a {user?.user_metadata.role}!
+              Hey, {session.user.email}! You are a{" "}
+              {session.user.user_metadata.role}!
             </PopoverContent>
           </Popover>
         </Link>
@@ -178,9 +182,7 @@ export default function NavBar() {
       </Link>
       <Separator className="border-[0.5px] border-neutral-200" />
 
-      <Link href="/" className="py-6">
-        <AuthButton />
-      </Link>
+      <AuthButton />
       <Separator className="border-[0.5px] border-neutral-200" />
 
       <div className="mt-auto flex flex-col items-center">
@@ -200,7 +202,8 @@ export default function NavBar() {
           <Popover>
             <PopoverTrigger className="text-sm font-bold">Club</PopoverTrigger>
             <PopoverContent>
-              Hey, {user?.email}! You are a {user?.user_metadata.role}!
+              Hey, {session?.user.email}! You are a{" "}
+              {session?.user.user_metadata?.role}!
             </PopoverContent>
           </Popover>
         </Link>

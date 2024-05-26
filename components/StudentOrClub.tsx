@@ -60,18 +60,25 @@ function StudentCards({ image, text }) {
   );
 }
 
-export async function TabsClubsEvents() {
+export function TabsClubsEvents() {
   const supabase = createClient();
-  const [user, setUser] = useState(null);
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    if (supabase) {
-      const { user }: any = supabase.auth.getUser();
-      setUser(user);
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  return user?.user_metadata.role === "student" ? (
+  return session?.user_metadata?.role === "student" ? (
     // Students
     <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">
