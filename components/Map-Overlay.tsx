@@ -24,7 +24,7 @@ import humanities from "../app/humanities.jpg";
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
 import { Switch } from "@/components/ui/switch";
-
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Collapsible,
   CollapsibleContent,
@@ -276,7 +276,7 @@ export function InputWithButton() {
 }
 
 export function CollapsibleInsights() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [topThree, setTopThree] = useState([]);
 
   useEffect(() => {
@@ -285,10 +285,7 @@ export function CollapsibleInsights() {
         `${process.env.NEXT_PUBLIC_URL}/api/topStudents`
       );
       const data = await response.json();
-      console.log("data:", data);
       const topThreeData = data.events.flat().slice(0, 3);
-      console.log("top three users: ");
-      console.log(topThreeData);
       setTopThree(topThreeData);
     };
     fetchData();
@@ -312,33 +309,46 @@ export function CollapsibleInsights() {
           </Button>
         </CollapsibleTrigger>
       </div>
-      <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border-cyan-400 border-4 px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
-          <div className="rounded-lg p-1 w-10 text-black bg-cyan-400 flex justify-center">
-            1
-          </div>
-          <div className="ml-3 gap-[140px] flex flex-row items-center">
-            {topThree[0]}
-            <Trophy className="stroke-cyan-400" />
-          </div>
-        </div>
-        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
-          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
-            2
-          </div>
-          <div className="ml-3 gap-[140px] flex flex-row items-center">
-            {topThree[1]}
-          </div>
-        </div>
-        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
-          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
-            3
-          </div>
-          <div className="ml-3 gap-[140px] flex flex-row items-center">
-            {topThree[2]}
-          </div>
-        </div>
-      </CollapsibleContent>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="insights"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="transition-opacity duration-1000"
+          >
+            <CollapsibleContent className="space-y-2">
+              {topThree.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1 }}
+                  className={`transition-opacity duration-1000 rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle ${
+                    index === 0 ? "border-cyan-400 border-4" : ""
+                  }`}
+                >
+                  <div
+                    className={`rounded-lg p-1 w-10 text-black flex justify-center ${
+                      index === 0 ? "bg-cyan-400" : "bg-neutral-100"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                  <div className="ml-3 gap-[140px] flex flex-row items-center">
+                    {item}
+                    {index === 0 && <Trophy className="stroke-cyan-400" />}
+                  </div>
+                </motion.div>
+              ))}
+            </CollapsibleContent>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Collapsible>
   );
 }
@@ -352,9 +362,7 @@ export function CollapsibleEvents() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
       const data = await response.json();
       const flattenedEvents = data.events.flat();
-      // console.log(flattenedEvents);
       const filteredEvents = flattenedEvents
-        .flat()
         .filter((event) => new Date(event.date) >= new Date())
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .slice(0, 2);
@@ -363,12 +371,12 @@ export function CollapsibleEvents() {
     fetchData();
   }, []);
 
-  console.log("2: ", events);
-  const allEvents: JSX.Element[] = events.map((club) => (
+  const allEvents: JSX.Element[] = events.map((event) => (
     <ClubCards
-      image={club.image}
-      text={club.name}
-      description={club.description}
+      key={event.id}
+      image={event.image}
+      text={event.name}
+      description={event.description}
     />
   ));
 
@@ -391,14 +399,32 @@ export function CollapsibleEvents() {
         </CollapsibleTrigger>
       </div>
 
-      <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[0]}
-        </div>
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[1]}
-        </div>
-      </CollapsibleContent>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="events"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CollapsibleContent className="space-y-2">
+              {allEvents.map((event, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800"
+                >
+                  {event}
+                </motion.div>
+              ))}
+            </CollapsibleContent>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Collapsible>
   );
 }
