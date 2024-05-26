@@ -96,6 +96,16 @@ async def get_students():
         return {"status": "error", "error": str(e)}
     
 
+@app.get("/api/topStudents")
+async def get_students():
+    try:
+        query = "MATCH (s:Student) RETURN s.email ORDER BY s.user_points DESC"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+
 @app.get("/api/clubs")
 async def get_events():
     try:
