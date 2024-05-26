@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createClient } from "@/utils/supabase/client";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, Trophy, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -275,8 +276,28 @@ export function InputWithButton() {
 }
 
 export function CollapsibleInsights() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [topThree, setTopThree] = useState([]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [topThreeStudents, setTopThreeStudents] = useState([]);
+  const [topThreeClubs, setTopThreeClubs] = useState([]);
+
+  const supabase = createClient();
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      console.log("session: ", session);
+      console.log("session.user role: ", session.user.user_metadata.role);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -284,13 +305,28 @@ export function CollapsibleInsights() {
         `${process.env.NEXT_PUBLIC_URL}/api/topStudents`
       );
       const data = await response.json();
-      const topThreeData = data.events.flat().slice(0, 3);
-      setTopThree(topThreeData);
+      const topThreeStudentsData = data.events.flat().slice(0, 3);
+      // console.log(topThreeStudentsData);
+      setTopThreeStudents(topThreeStudentsData);
     };
     fetchData();
   }, []);
 
-  return (
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/topClubs`
+      );
+      const data = await response.json();
+      const topThreeClubsData = data.events.flat().slice(0, 3);
+      // console.log(topThreeClubsData);
+      setTopThreeClubs(topThreeClubsData);
+    };
+    fetchData();
+  }, []);
+
+  return session?.user.user_metadata?.role === "student" ? (
+    // Students
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
@@ -308,46 +344,80 @@ export function CollapsibleInsights() {
           </Button>
         </CollapsibleTrigger>
       </div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            key="insights"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="transition-opacity duration-1000"
-          >
-            <CollapsibleContent className="space-y-2">
-              {topThree.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1 }}
-                  className={`transition-opacity duration-1000 rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle ${
-                    index === 0 ? "border-cyan-400 border-4" : ""
-                  }`}
-                >
-                  <div
-                    className={`rounded-lg p-1 w-10 text-black flex justify-center ${
-                      index === 0 ? "bg-cyan-400" : "bg-neutral-100"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <div className="ml-3 gap-[140px] flex flex-row items-center">
-                    {item}
-                    {index === 0 && <Trophy className="stroke-cyan-400" />}
-                  </div>
-                </motion.div>
-              ))}
-            </CollapsibleContent>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <CollapsibleContent className="space-y-2">
+        <div className="rounded-md border-cyan-400 border-4 px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-cyan-400 flex justify-center">
+            1
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center justify-between w-full">
+            {topThreeStudents[0]}
+            <Trophy className="stroke-cyan-400" />
+          </div>
+        </div>
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            2
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThreeStudents[1]}
+          </div>
+        </div>
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            3
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThreeStudents[2]}
+          </div>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  ) : (
+    // Clubs
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="w-[350px] space-y-2"
+    >
+      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-900 rounded-md">
+        <h4 className="text-sm font-semibold">Insights</h4>
+        <CollapsibleTrigger
+          asChild
+          className="m-1 bg-cyan-400 hover:bg-cyan-400"
+        >
+          <Button variant="ghost" size="sm" className="w-9 p-0">
+            <ChevronsUpDown className="h-4 w-4 text-black" />
+            <span className="sr-only">Toggle</span>
+          </Button>
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent className="space-y-2">
+        <div className="rounded-md border-cyan-400 border-4 px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-cyan-400 flex justify-center">
+            1
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center justify-between w-full">
+            {topThreeClubs[0]}
+            <Trophy className="stroke-cyan-400" />
+          </div>
+        </div>
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            2
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThreeClubs[1]}
+          </div>
+        </div>
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            3
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThreeClubs[2]}
+          </div>
+        </div>
+      </CollapsibleContent>
     </Collapsible>
   );
 }
