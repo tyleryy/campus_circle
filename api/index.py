@@ -149,7 +149,7 @@ async def create_event(event: Event):
             long: '{event.long}', \
             lat: '{event.lat}', \
             email: '{event.email}' \
-        }}) RETURN ID(n) \
+        }})<-[r:RUNNING]-(c:Club {{email: '{event.email}'}}) RETURN ID(n) \
         "
         
         records, _, _ = driver.execute_query(query, database="neo4j")
