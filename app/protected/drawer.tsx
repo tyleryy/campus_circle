@@ -52,14 +52,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const supabase = createClient();
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -88,9 +84,9 @@ async function uploadFile(file) {
 export function DrawerDemo() {
   const [pic, setPic] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-  const { setIsEdit, setEventId } = useContext(DataContext);
+  const { isEdit, setIsEdit, setEventId, setPos } = useContext(DataContext);
   // const {
   //   data: { user },
   // } = supabase.auth.getUser();
@@ -99,14 +95,10 @@ export function DrawerDemo() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setData(user);
+      setUserData(user);
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -151,6 +143,7 @@ export function DrawerDemo() {
       lat: values.latitude,
       type: values.eventType,
       image: publicUrl,
+      email: userData?.user_metadata.email,
     };
 
     try {
@@ -173,6 +166,7 @@ export function DrawerDemo() {
       console.error("Error:", error);
     }
   }
+  console.log(isEdit);
 
   function formatDate(date: any) {
     let month = String(date.getMonth() + 1).padStart(2, "0");
@@ -281,34 +275,7 @@ export function DrawerDemo() {
                     </FormItem>
                   )}
                 />
-                {/* Latitude */}
-                {/* <FormField
-                  control={form.control}
-                  name="latitude"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Latitude</FormLabel>
-                      <FormControl>
-                        <Input placeholder="33.6405" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-                {/* Longitude */}
-                {/* <FormField
-                  control={form.control}
-                  name="longitude"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Longitude</FormLabel>
-                      <FormControl>
-                        <Input placeholder="33.6405" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
+
                 {/* StartTime */}
                 <FormField
                   control={form.control}
@@ -317,7 +284,7 @@ export function DrawerDemo() {
                     <FormItem>
                       <FormLabel>Start Time</FormLabel>
                       <FormControl>
-                        <Input placeholder="11:00 AM - 5:00 PM" {...field} />
+                        <Input placeholder="11PM" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -331,7 +298,7 @@ export function DrawerDemo() {
                     <FormItem>
                       <FormLabel>End Time</FormLabel>
                       <FormControl>
-                        <Input placeholder="11:00 AM - 5:00 PM" {...field} />
+                        <Input placeholder="11PM" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -370,7 +337,8 @@ export function DrawerDemo() {
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
+                              date <= new Date() ||
+                              date < new Date("1900-01-01")
                             }
                             initialFocus
                           />

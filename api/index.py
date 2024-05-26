@@ -50,6 +50,7 @@ class Event(BaseModel):
     lat: str
     type: str
     image: str = "img.png"
+    email: str
 
 class Pin(BaseModel):
     event_id: int
@@ -105,20 +106,21 @@ async def get_events():
 async def create_event(event: Event):
     print(event) 
     try:
-        query = f"""
-        CREATE (n:Event {{
-            date: '{event.date}', 
-            image: '{event.image}', 
-            start_time: '{event.start_time}', 
-            name: '{event.name}', 
-            end_time: '{event.end_time}', 
-            description: '{event.description}', 
-            location: '{event.location}', 
-            type: '{event.type}', 
-            long: '{event.long}', 
-            lat: '{event.lat}'
-        }}) RETURN ID(n)
-        """
+        query = f"\
+        CREATE (n:Event {{\
+            date: '{event.date}',\
+            image: '{event.image}', \
+            start_time: '{event.start_time}', \
+            name: '{event.name}', \
+            end_time: '{event.end_time}', \
+            description: '{event.description}', \
+            location: '{event.location}', \
+            type: '{event.type}', \
+            long: '{event.long}', \
+            lat: '{event.lat}', \
+            email: '{event.email}' \
+        }}) RETURN ID(n) \
+        "
         
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "event": records[0]}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import DeployButton from "@/components/DeployButton";
 import { useState } from "react";
@@ -13,16 +14,16 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { DataProvider } from "@/app/context/DataContext";
+import DataContext from "@/app/context/DataContext";
 
 export default function ClientHome({ user }: { user: any }) {
   const [isEdit, setIsEdit] = useState(false);
-  const [pos, setPos] = useState({ lat: 33.6461, lng: -117.8427 });
+  const [pos, setPos] = useState({ lat: 0, lng: 0 });
   const [eventId, setEventId] = useState("");
   const createLocation = () => {};
 
   return (
-    <DataProvider
+    <DataContext.Provider
       value={{
         isEdit,
         setIsEdit,
@@ -58,6 +59,6 @@ export default function ClientHome({ user }: { user: any }) {
           </ResizablePanelGroup>
         </div>
       </main>
-    </DataProvider>
+    </DataContext.Provider>
   );
 }

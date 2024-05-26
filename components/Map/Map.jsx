@@ -34,6 +34,7 @@ export default function Map() {
   const [position, setPosition] = useState(centerPosition);
   const [events, setEvents] = useState([]);
   const { pos, setPos, isEdit, setIsEdit, eventId } = useContext(DataContext);
+  console.log(isEdit);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,8 +105,8 @@ export default function Map() {
   async function handleSubmit() {
     const pin = {
       event_id: eventId,
-      lat: pos.lat,
-      long: pos.lng,
+      lat: position.lat,
+      long: position.lng,
     };
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
