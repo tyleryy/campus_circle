@@ -286,8 +286,8 @@ export function CollapsibleInsights() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      console.log("session: ", session);
-      console.log("session.user role: ", session.user.user_metadata.role);
+      // console.log("session: ", session);
+      // console.log("session.user role: ", session.user.user_metadata.role);
     });
 
     const {

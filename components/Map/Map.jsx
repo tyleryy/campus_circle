@@ -34,7 +34,7 @@ export default function Map() {
   const [position, setPosition] = useState(centerPosition);
   const [events, setEvents] = useState([]);
   const { pos, setPos, isEdit, setIsEdit, eventId } = useContext(DataContext);
-  console.log(isEdit);
+  // console.log(isEdit);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,7 +101,7 @@ export default function Map() {
     [setPosition]
   );
 
-  console.log("posi:", position);
+  // console.log("posi:", position);
   async function handleSubmit() {
     const pin = {
       event_id: eventId,
@@ -119,10 +119,10 @@ export default function Map() {
       }
     );
     const data = await response.json();
-    console.log("ping:", data);
+    // console.log("ping:", data);
   }
 
-  console.log("pos:", pos);
+  // console.log("pos:", pos);
 
   const toggleDraggable = () => {
     handleSubmit();
