@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 export default function EventCard({
   image,
@@ -34,10 +35,12 @@ export default function EventCard({
           <div className="items-center flex gap-2">
             <MapPin />
             <CardDescription className="text-sm">{location}</CardDescription>
+            {/* <Switch id="JoinClub" className="border border-neutral-200" /> */}
           </div>
           <h2 className="text-sm">
             {weekday} {start} - {end}
           </h2>
+          <Switch id="JoinClub" className="border border-neutral-200" />
         </CardHeader>
       </div>
     </Card>
