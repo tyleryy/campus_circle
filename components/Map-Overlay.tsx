@@ -84,10 +84,10 @@ function ClubCards({ image, text, description }) {
       </div>
       <div className="ml-5 text-neutral-100 flex-col">
         <h3 className="text-lg font-semibold">
-          {text.length > 25 ? `${text.slice(0, 25)}...` : text}
+          {text?.length > 25 ? `${text.slice(0, 25)}...` : text}
         </h3>
         <p className="text-sm text-gray-600">
-          {description.length > 25
+          {description?.length > 25
             ? `${description.slice(0, 25)}...`
             : description}
         </p>
