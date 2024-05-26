@@ -33,8 +33,11 @@ import {
   ScrollAreaEvents,
   InputWithButton,
   CollapsibleEvents,
+  ScrollAreaMyEvents,
+  ScrollAreaStudentEvents,
 } from "./Map-Overlay";
 import profile from "@/app/profile.jpg";
+import { DrawerDemo } from "@/app/protected/drawer";
 
 function StudentCards({ image, text }) {
   return (
@@ -59,7 +62,7 @@ function StudentCards({ image, text }) {
 
 export function ScrollAreaStudents() {
   return (
-    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+    <ScrollArea className="w-full rounded-md pb-36 h-[825px]">
       <StudentCards image={profile.src} text="Alex Ngo" />
       <StudentCards image={profile.src} text="Alex Ngo" />
       <StudentCards image={profile.src} text="Alex Ngo" />
@@ -143,7 +146,7 @@ export async function TabsClubsEvents() {
             <CheckBox />
           </CardHeader>
           <CardContent className="h-screen">
-            <ScrollAreaEvents />
+            <ScrollAreaStudentEvents />
           </CardContent>
         </Card>
       </TabsContent>
@@ -163,13 +166,14 @@ export async function TabsClubsEvents() {
           Students
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="events" className="">
+      <TabsContent value="events" className="h-full">
         <Card className="h-[800px]">
           <CardHeader>
             <InputWithButton />
+            <DrawerDemo />
           </CardHeader>
-          <CardContent className="">
-            <ScrollAreaEvents />
+          <CardContent className="h-screen">
+            <ScrollAreaMyEvents />
           </CardContent>
         </Card>
       </TabsContent>

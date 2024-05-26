@@ -283,7 +283,7 @@ export function CollapsibleInsights() {
       onOpenChange={setIsOpen}
       className="w-[350px] space-y-2"
     >
-      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-800 rounded-md">
+      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-900 rounded-md">
         <h4 className="text-sm font-semibold">Insights</h4>
         <CollapsibleTrigger
           asChild
@@ -342,7 +342,7 @@ export function CollapsibleEvents() {
       onOpenChange={setIsOpen}
       className="w-[350px] space-y-2"
     >
-      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-800 rounded-md">
+      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-900 rounded-md">
         <h4 className="text-sm font-semibold">Upcoming Events</h4>
         <CollapsibleTrigger
           asChild
@@ -364,46 +364,5 @@ export function CollapsibleEvents() {
         </div>
       </CollapsibleContent>
     </Collapsible>
-  );
-}
-
-export function TabsClubsEvents() {
-  return (
-    <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account" className="font-semibold">
-          Clubs
-        </TabsTrigger>
-        <TabsTrigger value="events" className="font-semibold">
-          Events
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="account" className="h-full">
-        <Card className="h-screen">
-          <CardHeader>
-            <InputWithButton />
-            <CheckBox />
-          </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaCards />
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      <TabsContent value="events">
-        <Card>
-          <CardHeader>
-            <CardTitle>Events</CardTitle>
-            <CardDescription>List of Events</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <DrawerDemo />
-          </CardContent>
-          {/* <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter> */}
-        </Card>
-      </TabsContent>
-    </Tabs>
   );
 }
