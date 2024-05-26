@@ -207,6 +207,24 @@ import { Description } from "@radix-ui/react-dialog";
 export function ScrollAreaEvents({ height }) {
   const [events, setEvents] = useState([]);
 
+
+  const supabase = createClient();
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Map month numbers to month names
   const monthNames = [
     "January",
@@ -235,7 +253,7 @@ export function ScrollAreaEvents({ height }) {
 
   return (
     <ScrollArea
-      className="w-full rounded-md overflow-y-auto"
+      className="w-full rounded-md overflow-y-auto height: 10vh"
       style={{ height: `${height}px` }}
     >
       {events.map((event) => {
@@ -255,6 +273,7 @@ export function ScrollAreaEvents({ height }) {
         const weekdayName = weekdayNames[date.getDay()];
         return (
           <EventCard
+            id={event.id}
             key={event.id}
             image={event.image}
             day={day}
@@ -267,6 +286,7 @@ export function ScrollAreaEvents({ height }) {
             description={event.description}
             lat = {event.lat}
             long = {event.long}
+            email = {session?.user.user_metadata?.}
           />
         );
       })}

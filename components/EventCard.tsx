@@ -19,6 +19,7 @@ import { Description } from "@radix-ui/react-dialog";
 import DataContext from "@/app/context/DataContext";
 
 export default function EventCard({
+  id,
   image,
   day,
   month,
@@ -30,6 +31,7 @@ export default function EventCard({
   description,
   lat,
   long,
+  email,
 }) {
   const [rsvpClicked, setRsvpClicked] = useState(false);
 
@@ -37,6 +39,24 @@ export default function EventCard({
 
   const handleRsvpClick = () => {
     setRsvpClicked(true);
+    onSubmit();
+  };
+
+  const onSubmit = async () => {
+    const student_info = {
+      email: email,
+      event_id: id,
+    };
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rsvp/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(student_info),
+    });
+    const data = await response.json();
+    console.log(data);
+    // setIsOpen(false);
   };
 
   return (
