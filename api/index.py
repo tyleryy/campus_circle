@@ -85,6 +85,16 @@ async def get_events():
     except Exception as e:
         return {"status": "error", "error": str(e)}
     
+ 
+@app.get("/api/students")
+async def get_students():
+    try:
+        query = "MATCH (e:Student) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
 
 @app.get("/api/clubs")
 async def get_events():

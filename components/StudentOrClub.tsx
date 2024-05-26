@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import {
   Card,
   CardContent,
@@ -25,6 +26,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import EventCard from "./EventCard";
 import {
   CheckBox,
   ScrollAreaCards,
@@ -77,7 +79,47 @@ export async function TabsClubsEvents() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const student_config = [
+    { image: profile.src, text: "Alex Ngo" },
+    { image: profile.src, text: "Alex Ngo" },
+    { image: profile.src, text: "Alex Ngo" },
+  ];
+
+  const config = [
+    {
+      image: humanities,
+      day: "25",
+      month: "MAY",
+      title: "BBA Dance",
+      location: "Humanities Hall",
+      weekday: "Fri",
+      start: "10:00AM",
+      end: "11:00AM",
+    },
+    {
+      image: humanities,
+      day: "26",
+      month: "MAY",
+      title: "BBA Dance",
+      location: "Humanities Hall",
+      weekday: "Fri",
+      start: "10:00AM",
+      end: "11:00AM",
+    },
+    {
+      image: humanities,
+      day: "25",
+      month: "MAY",
+      title: "BBA Dance",
+      location: "Humanities Hall",
+      weekday: "Fri",
+      start: "10:00AM",
+      end: "11:00AM",
+    },
+  ];
+
   return user.user_metadata.role === "student" ? (
+    // Students
     <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="account" className="font-semibold">
@@ -87,6 +129,7 @@ export async function TabsClubsEvents() {
           Events
         </TabsTrigger>
       </TabsList>
+      {/* 2 tabs */}
       <TabsContent value="account" className="">
         <Card className="h-[800px]">
           <CardHeader>
@@ -106,12 +149,14 @@ export async function TabsClubsEvents() {
             <CheckBox />
           </CardHeader>
           <CardContent className="h-screen">
-            <ScrollAreaEvents />
+            <ScrollAreaEvents events={config} />
           </CardContent>
         </Card>
       </TabsContent>
     </Tabs>
   ) : (
+    // Clubs
+    // 3 tabs
     <Tabs defaultValue="events" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="events" className="font-semibold">
@@ -130,7 +175,7 @@ export async function TabsClubsEvents() {
             <InputWithButton />
           </CardHeader>
           <CardContent className="">
-            <ScrollAreaEvents />
+            <ScrollAreaEvents events={config} />
           </CardContent>
         </Card>
       </TabsContent>

@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Send } from "lucide-react";
 import ctc from "../app/ctc_logo.png";
 import hack from "../app/hack-at-uci-logo_black.png";
-import humanities from "../app/humanities.jpg"
+import humanities from "../app/humanities.jpg";
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
 
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import EventCard from "./EventCard";
- 
+
 const frameworks = [
   {
     value: "next.js",
@@ -86,10 +86,10 @@ function ClubCards({ image, text, description }) {
     <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
       <div className="h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1">
         {image && (
-          <Image
+          <img
             width={100}
             height={100}
-            src={image.src}
+            src={image}
             alt="Card"
             className="rounded-lg p-1 w-20 bg-neutral-100"
           />
@@ -137,43 +137,66 @@ export function ScrollAreaCards() {
   );
 }
 
-export function ScrollAreaEvents() {
+function StudentCards({ image, text }) {
+  return (
+    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
+      <div className="h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1">
+        {image && (
+          <img
+            src={image}
+            alt="Card"
+            className="rounded-lg w-20 bg-neutral-100"
+          />
+        )}
+      </div>
+      <div className="ml-5 text-neutral-100 flex-col">
+        <h3 className="text-lg font-semibold">{text}</h3>
+      </div>
+    </div>
+  );
+}
+
+export function ScrollAreaStudents() {
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/students`
+      );
+      const data = await response.json();
+      const flattenedStudents = data.events.flat();
+      setStudents(flattenedStudents);
+    };
+    fetchData();
+  }, []);
+
   return (
     <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
-      <EventCard
-        image={humanities}
-        day="25"
-        month="MAY"
-        title="BBA Dance"
-        location="Humanities Hall"
-        weekday="Fri"
-        start="10:00AM"
-        end="11:00AM"
-      />
-      <EventCard
-        image={humanities}
-        day="25"
-        month="MAY"
-        title="BBA Dance"
-        location="Humanities Hall"
-        weekday="Fri"
-        start="10:00AM"
-        end="11:00AM"
-      />
-      <EventCard
-        image={humanities}
-        day="25"
-        month="MAY"
-        title="BBA Dance"
-        location="Humanities Hall"
-        weekday="Fri"
-        start="10:00AM"
-        end="11:00AM"
-      />
+      {students?.map((student: any) => (
+        <StudentCards image={student.image_url} text={student.email} />
+      ))}
     </ScrollArea>
   );
 }
 
+export function ScrollAreaEvents({ events }: any) {
+  return (
+    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+      {events.map((event) => (
+        <EventCard
+          image={event.image}
+          day={event.day}
+          month={event.month}
+          title={event.title}
+          location={event.location}
+          weekday={event.weekday}
+          start={event.start}
+          end={event.end}
+        />
+      ))}
+    </ScrollArea>
+  );
+}
 
 export function InputWithButton() {
   return (
