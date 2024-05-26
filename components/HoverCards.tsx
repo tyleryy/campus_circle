@@ -11,7 +11,7 @@ export const HoverEffect = ({
 }: {
   items: {
     title: string;
-    image: StaticImageData;
+    image: any;
   }[];
   className?: string;
 }) => {
