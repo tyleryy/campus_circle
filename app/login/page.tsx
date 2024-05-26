@@ -95,7 +95,7 @@ export default function Login({
             className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
           >
             <polyline points="15 18 9 12 15 6" />
-          </svg>{" "}
+          </svg>
           Back
         </Link>
 

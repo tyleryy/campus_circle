@@ -6,28 +6,34 @@ import { useEffect, useState } from "react";
 
 export default function AuthButton() {
   const supabase = createClient();
-  const [user, setUser] = useState(null);
-
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
-    if (supabase) {
-      const { user }: any = supabase.auth.getUser();
-      setUser(user);
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    console.log("session", session);
+  }, [session]);
   const signOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     return redirect("/login");
   };
 
-  return user ? (
+  return session?.user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      Hey, {session.user.email}!
       <form action={signOut}>
         <button className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2 bg-btn-background hover:bg-btn-background-hover">
           Logout

@@ -24,7 +24,7 @@ import humanities from "../app/humanities.jpg";
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
 import { Switch } from "@/components/ui/switch";
-
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Collapsible,
   CollapsibleContent,
@@ -431,9 +431,7 @@ export function CollapsibleEvents() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
       const data = await response.json();
       const flattenedEvents = data.events.flat();
-      // console.log(flattenedEvents);
       const filteredEvents = flattenedEvents
-        .flat()
         .filter((event) => new Date(event.date) >= new Date())
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .slice(0, 2);
@@ -442,12 +440,12 @@ export function CollapsibleEvents() {
     fetchData();
   }, []);
 
-  console.log("2: ", events);
-  const allEvents: JSX.Element[] = events.map((club) => (
+  const allEvents: JSX.Element[] = events.map((event) => (
     <ClubCards
-      image={club.image}
-      text={club.name}
-      description={club.description}
+      key={event.id}
+      image={event.image}
+      text={event.name}
+      description={event.description}
     />
   ));
 
@@ -470,14 +468,32 @@ export function CollapsibleEvents() {
         </CollapsibleTrigger>
       </div>
 
-      <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[0]}
-        </div>
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[1]}
-        </div>
-      </CollapsibleContent>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="events"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CollapsibleContent className="space-y-2">
+              {allEvents.map((event, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800"
+                >
+                  {event}
+                </motion.div>
+              ))}
+            </CollapsibleContent>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Collapsible>
   );
 }
