@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import EventCard from "./EventCard";
-import {CheckBox, ScrollAreaClubs, ScrollAreaEvents, InputWithButton, CollapsibleEvents} from "./Map-Overlay"
+import {CheckBox, ScrollAreaCards, ScrollAreaEvents, InputWithButton, CollapsibleEvents} from "./Map-Overlay"
 import profile from "@/app/profile.jpg"
 
 function StudentCards({ image, text }) {
@@ -91,6 +91,7 @@ export async function TabsClubsEvents() {
     } = await supabase.auth.getUser();
   
     return (
+        
       user.user_metadata.role === "student" ?
         <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
           <TabsList className="grid w-full grid-cols-2">
@@ -104,7 +105,7 @@ export async function TabsClubsEvents() {
                 <CheckBox />
               </CardHeader>
               <CardContent className="">
-                <ScrollAreaClubs />
+                <ScrollAreaCards />
               </CardContent>
             </Card>
           </TabsContent>
