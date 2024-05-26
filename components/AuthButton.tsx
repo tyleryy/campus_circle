@@ -22,9 +22,9 @@ export default function AuthButton() {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log("session", session);
-  }, [session]);
+  // useEffect(() => {
+  //   console.log("session", session);
+  // }, [session]);
   const signOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
