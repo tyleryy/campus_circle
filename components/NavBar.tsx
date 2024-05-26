@@ -141,7 +141,7 @@ export default function NavBar() {
         </Link>
         <Link
           href="#"
-          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 flex-col items-center"
+          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm flex-col px-1 items-center"
           onClick={() => {
             setIsStudentOpen(true);
           }}
@@ -195,7 +195,7 @@ export default function NavBar() {
 
         <Link
           href="#"
-          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 py-1 flex-col"
+          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm px-1 flex-col"
           onClick={() => {
             setIsOpen(true);
           }}
