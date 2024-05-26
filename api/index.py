@@ -50,6 +50,12 @@ class Event(BaseModel):
     lat: str
     type: str
     image: str = "img.png"
+    email: str
+
+class Pin(BaseModel):
+    event_id: int
+    lat: float
+    long: float
 
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
@@ -119,21 +125,40 @@ async def get_events():
 async def create_event(event: Event):
     print(event) 
     try:
-        query = f"""
-        CREATE (n:Event {{
-            date: '{event.date}', 
-            image: '{event.image}', 
-            start_time: '{event.start_time}', 
-            name: '{event.name}', 
-            end_time: '{event.end_time}', 
-            description: '{event.description}', 
-            location: '{event.location}', 
-            type: '{event.type}', 
-            long: '{event.long}', 
-            lat: '{event.lat}'
-        }}) RETURN n
-        """
+        query = f"\
+        CREATE (n:Event {{\
+            date: '{event.date}',\
+            image: '{event.image}', \
+            start_time: '{event.start_time}', \
+            name: '{event.name}', \
+            end_time: '{event.end_time}', \
+            description: '{event.description}', \
+            location: '{event.location}', \
+            type: '{event.type}', \
+            long: '{event.long}', \
+            lat: '{event.lat}', \
+            email: '{event.email}' \
+        }}) RETURN ID(n) \
+        "
         
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "event": records[0]}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+
+@app.post("/api/updateEventLocation/")
+async def update_event_location(pin: Pin):
+    event_id = pin.event_id
+    lat = pin.lat
+    long = pin.long
+    try:
+        query = f"""
+        MATCH (e:Event)
+        WHERE ID(e) = {event_id}
+        SET e.lat = '{lat}', e.long = '{long}'
+        RETURN e
+        """
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "event": records[0]}
     except Exception as e:
