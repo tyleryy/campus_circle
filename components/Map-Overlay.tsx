@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -257,38 +258,4 @@ export function CollapsibleEvents() {
         </CollapsibleContent>
       </Collapsible>
     );
-}
-
-export function TabsClubsEvents() {
-  return (
-    <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account" className='font-semibold'>Clubs</TabsTrigger>
-        <TabsTrigger value="password" className='font-semibold'>Events</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account" className="">
-        <Card className="h-[800px]">
-          <CardHeader>
-            <InputWithButton />
-            <CheckBox />
-          </CardHeader>
-          <CardContent className="">
-            <ScrollAreaClubs />
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      <TabsContent value="password" className="h-full">
-        <Card className="h-[800px]">
-          <CardHeader>
-            <InputWithButton />
-            <CheckBox />
-          </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaEvents />
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
-  );
 }
