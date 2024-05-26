@@ -13,8 +13,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { use, useEffect, useState } from "react";
-import { Image } from "next/image";
+import { useEffect, useState } from "react";
 
 import { createClient } from "@supabase/supabase-js";
 
