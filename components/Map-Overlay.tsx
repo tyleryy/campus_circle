@@ -23,6 +23,7 @@ import hack from "../app/hack-at-uci-logo_black.png";
 import humanities from "../app/humanities.jpg";
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
+import { Switch } from "@/components/ui/switch";
 
 import {
   Collapsible,
@@ -81,6 +82,14 @@ export function CheckBox() {
 //       <p className="text-sm text-gray-600">{description}</p>
 //     </div>
 
+const InClub = ({ className, ...props }) => {
+  return (
+    <div className={` ${className}`} {...props}>
+      <Switch id="JoinClub" className="border border-neutral-200" />
+    </div>
+  );
+};
+
 function ClubCards({ image, text, description }) {
   return (
     <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
@@ -95,16 +104,19 @@ function ClubCards({ image, text, description }) {
           />
         )}
       </div>
-      <div className="ml-5 text-neutral-100 flex-col">
-        <h3 className="text-lg font-semibold">
-          {text?.length > 25 ? `${text.slice(0, 25)}...` : text}
-        </h3>
-        <p className="text-sm text-gray-600">
-          {description?.length > 25
-            ? `${description.slice(0, 25)}...`
-            : description}
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="ml-5 text-neutral-200 flex-col flex">
+          <h3 className="text-lg font-semibold">
+            {text?.length > 25 ? `${text.slice(0, 25)}...` : text}
+          </h3>
+          <p className="text-sm text-gray-600">
+            {description?.length > 25
+              ? `${description.slice(0, 25)}...`
+              : description}
+          </p>
+        </div>
       </div>
+      <InClub className="ml-auto" />
     </div>
   );
 }
