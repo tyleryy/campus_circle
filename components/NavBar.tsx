@@ -1,19 +1,19 @@
-import { Home } from 'lucide-react';
-import { Users } from 'lucide-react';
-import { MapPinned } from 'lucide-react';
-import { Calendar } from 'lucide-react';
-import { Settings } from 'lucide-react';
-import AuthButton from "@/components/AuthButtonServer";
+import { Home } from "lucide-react";
+import { Users } from "lucide-react";
+import { MapPinned } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { Settings } from "lucide-react";
+import AuthButton from "@/components/AuthButton";
 import { Button } from "@/components/ui/button";
-import Link from 'next/link';
-import { ModeToggle } from './dark-mode-toggle';
-import Image from 'next/image';
+import Link from "next/link";
+import { ModeToggle } from "./dark-mode-toggle";
+import Image from "next/image";
 import logo from "../app/campus_circle_logo.png";
 
 function getCurrentDayAndMonth() {
   const date = new Date();
   const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' }).toUpperCase();
+  const month = date.toLocaleString("default", { month: "long" }).toUpperCase();
   return { day, month };
 }
 
@@ -22,7 +22,7 @@ function ButtonIcon() {
     <Button variant="ghost" size="icon">
       <Home className="h-8 w-8 dark:hover:bg-blue-400 duration-300 rounded-sm" />
     </Button>
-  )
+  );
 }
 
 function UserIcon() {
@@ -30,7 +30,7 @@ function UserIcon() {
     <Button variant="ghost" size="icon">
       <Users className="h-8 w-8 dark:hover:bg-blue-400 duration-300 rounded-sm" />
     </Button>
-  )
+  );
 }
 
 function MapIcon() {
@@ -38,7 +38,7 @@ function MapIcon() {
     <Button variant="ghost" size="icon">
       <MapPinned className="h-8 w-8 dark:hover:bg-blue-400 duration-300 rounded-sm" />
     </Button>
-  )
+  );
 }
 
 function CalIcon() {
@@ -46,7 +46,7 @@ function CalIcon() {
     <Button variant="ghost" size="icon">
       <Calendar className="h-8 w-8 dark:hover:bg-blue-400 duration-300 rounded-sm" />
     </Button>
-  )
+  );
 }
 
 function SettingsIcon() {
@@ -54,7 +54,7 @@ function SettingsIcon() {
     <Button variant="ghost" size="icon">
       <Settings className="h-8 w-8 dark:hover:bg-blue-400 duration-300 rounded-sm" />
     </Button>
-  )
+  );
 }
 
 export default function NavBar() {
@@ -68,14 +68,30 @@ export default function NavBar() {
         <span className="text-3xl">{day}</span>
         <span>{month}</span>
       </div>
-      <Link href="/" className="py-6"><ButtonIcon /></Link>
-      <Link href="#" className="py-6"><UserIcon /></Link>
-      <Link href="https://calendar.google.com/" target = '_blank' className="py-6"><MapIcon /></Link>
-      <Link href="#" className="py-6"><CalIcon /></Link>
-      <Link href="#" className="py-6"><AuthButton /></Link>
+      <Link href="/" className="py-6">
+        <ButtonIcon />
+      </Link>
+      <Link href="#" className="py-6">
+        <UserIcon />
+      </Link>
+      <Link
+        href="https://calendar.google.com/"
+        target="_blank"
+        className="py-6"
+      >
+        <MapIcon />
+      </Link>
+      <Link href="#" className="py-6">
+        <CalIcon />
+      </Link>
+      <AuthButton />
       <div className="mt-auto flex flex-col items-center">
-        <Link href="#" className="mb-6"><ModeToggle /></Link>
-        <Link href="#" className="mb-8"><SettingsIcon /></Link>
+        <Link href="#" className="mb-6">
+          <ModeToggle />
+        </Link>
+        <Link href="#" className="mb-8">
+          <SettingsIcon />
+        </Link>
       </div>
     </nav>
   );

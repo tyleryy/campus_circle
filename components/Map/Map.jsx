@@ -1,7 +1,7 @@
 "use client";
 
 // START: Preserve spaces to avoid auto-sorting
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo, useEffect, useContext } from "react";
 
 import "leaflet/dist/leaflet.css";
 
@@ -18,7 +18,7 @@ import {
   ping4Icon,
   ping5Icon,
 } from "./MapIcons";
-
+import DataContext from "@/app/context/DataContext";
 // END: Preserve spaces to avoid auto-sorting
 import {
   MapContainer,
@@ -30,9 +30,10 @@ import {
 
 export default function Map() {
   const centerPosition = { lat: 33.6461, lng: -117.8427 };
-  const [isEdit, setIsEdit] = useState(true);
+  // const [isEdit, setIsEdit] = useState(true);
   const [position, setPosition] = useState(centerPosition);
   const [events, setEvents] = useState([]);
+  const { pos, setPos, isEdit, setIsEdit, eventId } = useContext(DataContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,15 +93,35 @@ export default function Map() {
         const marker = markerRef.current;
         if (marker != null) {
           setPosition(marker.getLatLng());
+          setPos(marker.getLatLng());
         }
       },
     }),
     [setPosition]
   );
 
+  console.log("posi:", position);
   async function handleSubmit() {
-    console.log("Submitted");
+    const pin = {
+      event_id: eventId,
+      lat: pos.lat,
+      long: pos.lng,
+    };
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pin),
+      }
+    );
+    const data = await response.json();
+    console.log("ping:", data);
   }
+
+  console.log("pos:", pos);
 
   const toggleDraggable = () => {
     handleSubmit();
@@ -136,7 +157,7 @@ export default function Map() {
   return (
     <MapContainer
       preferCanvas={true}
-      center={[33.6461, -117.8427]}
+      center={[33.64513592505738, -117.82476533065436]}
       zoom={17}
       minZoom={15}
       scrollWheelZoom={false}
@@ -150,7 +171,7 @@ export default function Map() {
         // Dark Mode:  "https://api.mapbox.com/styles/v1/ghosnm/ckzq73c69001414nve9hlcx9d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZ2hvc25tIiwiYSI6ImNrenE2eTZqcjM1N2oyb3FyeXBkaGwzMHoifQ.Y1Fk71N1-mAY4AAmXHAt6Q"
       />
       {allMarkers}
-      <NewItemMarker />
+      {isEdit ? <NewItemMarker /> : null}
     </MapContainer>
   );
 }

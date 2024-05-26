@@ -51,6 +51,11 @@ class Event(BaseModel):
     type: str
     image: str = "img.png"
 
+class Pin(BaseModel):
+    event_id: int
+    lat: float
+    long: float
+
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
@@ -112,9 +117,27 @@ async def create_event(event: Event):
             type: '{event.type}', 
             long: '{event.long}', 
             lat: '{event.lat}'
-        }}) RETURN n
+        }}) RETURN ID(n)
         """
         
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "event": records[0]}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+
+@app.post("/api/updateEventLocation/")
+async def update_event_location(pin: Pin):
+    event_id = pin.event_id
+    lat = pin.lat
+    long = pin.long
+    try:
+        query = f"""
+        MATCH (e:Event)
+        WHERE ID(e) = {event_id}
+        SET e.lat = '{lat}', e.long = '{long}'
+        RETURN e
+        """
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "event": records[0]}
     except Exception as e:

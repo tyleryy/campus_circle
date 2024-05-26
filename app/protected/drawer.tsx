@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useEffect, useState, useContext } from "react";
+
 import {
   Select,
   SelectContent,
@@ -22,6 +24,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import DataContext from "../../app/context/DataContext";
 
 import {
   Popover,
@@ -37,6 +40,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { createClient } from "@/utils/supabase/client";
+
 import {
   Form,
   FormControl,
@@ -51,6 +56,11 @@ import Link from "next/link";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   description: z.string().min(2).max(50),
@@ -61,9 +71,43 @@ const formSchema = z.object({
   longitude: z.string(),
   latitude: z.string(),
   eventType: z.string(),
+  image: typeof window === "undefined" ? z.any() : z.instanceof(FileList),
 });
 
+async function uploadFile(file) {
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(`${file.name}`, file, { upsert: true });
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(data);
+  }
+}
+
 export function DrawerDemo() {
+  const [pic, setPic] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState(null);
+
+  const { setIsEdit, setEventId } = useContext(DataContext);
+  // const {
+  //   data: { user },
+  // } = supabase.auth.getUser();
+  useEffect(() => {
+    const fetchData = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setData(user);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,10 +124,21 @@ export function DrawerDemo() {
     },
   });
 
+  const fileRef = form.register("image");
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Convert date to a string in the required format
     const formattedDate = formatDate(values.date);
+    let publicUrl = "";
+
+    if (values.image && values.image[0]) {
+      const uploadData = await uploadFile(values.image[0]);
+      const { data } = supabase.storage
+        .from("images")
+        .getPublicUrl(values.image[0].name);
+      publicUrl = data.publicUrl;
+    }
 
     const eventData = {
       name: values.name,
@@ -95,10 +150,8 @@ export function DrawerDemo() {
       long: values.longitude,
       lat: values.latitude,
       type: values.eventType,
-      image: "img.png",
+      image: publicUrl,
     };
-
-    console.log("submitted: ", eventData);
 
     try {
       const response = await fetch(
@@ -113,7 +166,9 @@ export function DrawerDemo() {
       );
 
       const result = await response.json();
-      console.log(result);
+      setEventId(result.event[0]);
+      setIsEdit(true);
+      setIsOpen(false);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -128,7 +183,7 @@ export function DrawerDemo() {
   }
 
   return (
-    <Drawer>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <div className="flex flex-row">
           <div className="bg-slate-700 p-3 rounded-sm gap-5 flex items-center w-2/3">
@@ -188,6 +243,27 @@ export function DrawerDemo() {
                   )}
                 />
 
+                {/* Image */}
+                <FormField
+                  control={form.control}
+                  name="image.file"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>File</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            placeholder="shadcn"
+                            {...fileRef}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+
                 {/* Location */}
                 <FormField
                   control={form.control}
@@ -206,7 +282,7 @@ export function DrawerDemo() {
                   )}
                 />
                 {/* Latitude */}
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="latitude"
                   render={({ field }) => (
@@ -218,9 +294,9 @@ export function DrawerDemo() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 {/* Longitude */}
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="longitude"
                   render={({ field }) => (
@@ -232,7 +308,7 @@ export function DrawerDemo() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 {/* StartTime */}
                 <FormField
                   control={form.control}
