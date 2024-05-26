@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Send } from "lucide-react";
 import ctc from "../app/ctc_logo.png";
 import hack from "../app/hack-at-uci-logo_black.png";
+import humanities from "../app/humanities.jpg"
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
 
@@ -28,7 +30,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-
+import EventCard from "./EventCard";
+ 
 const frameworks = [
   {
     value: "next.js",
@@ -68,9 +71,19 @@ export function CheckBox() {
   );
 }
 
+// return (
+//   <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
+//     <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1'>
+//         {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
+//     </div>
+//     <div className='ml-5 text-neutral-100 flex-col'>
+//       <h3 className="text-lg font-semibold">{text}</h3>
+//       <p className="text-sm text-gray-600">{description}</p>
+//     </div>
+
 function ClubCards({ image, text, description }) {
   return (
-    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-2">
+    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
       <div className="h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1">
         {image && (
           <Image
@@ -123,6 +136,44 @@ export function ScrollAreaCards() {
     </ScrollArea>
   );
 }
+
+export function ScrollAreaEvents() {
+  return (
+    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+      <EventCard
+        image={humanities}
+        day="25"
+        month="MAY"
+        title="BBA Dance"
+        location="Humanities Hall"
+        weekday="Fri"
+        start="10:00AM"
+        end="11:00AM"
+      />
+    </ScrollArea>
+  );
+}
+
 
 export function InputWithButton() {
   return (

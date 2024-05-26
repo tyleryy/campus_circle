@@ -6,8 +6,8 @@ import NavBar from "@/components/NavBar";
 import {
   CollapsibleEvents,
   CollapsibleInsights,
-  TabsClubsEvents,
 } from "@/components/Map-Overlay";
+import { TabsClubsEvents } from "@/components/StudentOrClub"
 import {
   ResizableHandle,
   ResizablePanel,
