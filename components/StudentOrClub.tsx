@@ -78,7 +78,12 @@ export function TabsClubsEvents() {
     return () => subscription.unsubscribe();
   }, []);
 
-  return session?.user_metadata?.role === "student" ? (
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
+
+  return session?.user_metadata?.role ||
+    session?.user.user_metadata?.role === "student" ? (
     // Students
     <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">

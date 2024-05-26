@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import AnimatedText from "../AnimatedText";
 
 const World = dynamic(
   () => import("@/components/globe-component").then((m) => m.World),
@@ -414,12 +415,13 @@ export function GlobeDemo() {
           }}
           className="div"
         >
-          <h2 className="text-center text-xl md:text-4xl font-bold text-black dark:text-blue-400">
-            CampusCircle
+          <h2 className="text-center text-xl md:text-4xl font-extralight text-black dark:text-blue-400">
+            <AnimatedText text="CampusCircle" />
           </h2>
-          <p className="text-center text-base md:text-lg font-normal text-neutral-700 dark:text-neutral-200 max-w-md mt-2 mx-auto">
-            Helping you find your <b className='dark:text-blue-400'>CIRCLE</b> on campus.
-          </p>
+          <AnimatedText
+            className="text-center md:text-md text-neutral-700 dark:text-neutral-200 max-w-md mx-auto"
+            text="Helping you find your circle on campus."
+          />
         </motion.div>
         <div className="absolute w-full bottom-0 inset-x-0 h-40 bg-gradient-to-b pointer-events-none select-none from-transparent dark:to-black to-white z-40" />
         <div className="absolute w-full -bottom-20 h-72 md:h-full z-10">
