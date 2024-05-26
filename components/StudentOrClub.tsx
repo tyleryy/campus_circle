@@ -27,7 +27,60 @@ import {
 import { Button } from "@/components/ui/button";
 import EventCard from "./EventCard";
 import {CheckBox, ScrollAreaClubs, ScrollAreaEvents, InputWithButton, CollapsibleEvents} from "./Map-Overlay"
+import profile from "@/app/profile.jpg"
 
+function StudentCards({ image, text }) {
+    return (
+      <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
+        <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1'>
+            {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
+        </div>
+        <div className='ml-5 text-neutral-100 flex-col'>
+          <h3 className="text-lg font-semibold">{text}</h3>
+        </div>
+      </div>
+    );
+}
+
+export function ScrollAreaStudents() {
+    return (
+        <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+            <StudentCards
+                image={profile.src}
+                text="Alex Ngo"
+            />
+        </ScrollArea>
+
+    );
+    }
 
 export async function TabsClubsEvents() {
 
@@ -69,31 +122,41 @@ export async function TabsClubsEvents() {
           </TabsContent>
         </Tabs>
       :
-        <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
+        <Tabs defaultValue="events" className="w-[350px] bg-slate-800 rounded-lg">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="account" className='font-semibold'>Clubs</TabsTrigger>
-          <TabsTrigger value="password" className='font-semibold'>Events</TabsTrigger>
+          <TabsTrigger value="events" className='font-semibold'>My Events</TabsTrigger>
+          <TabsTrigger value="clubs" className='font-semibold'>Other Clubs</TabsTrigger>
+          <TabsTrigger value="students" className='font-semibold'>Students</TabsTrigger>
         </TabsList>
-        <TabsContent value="account" className="">
+        <TabsContent value="events" className="">
           <Card className="h-[800px]">
             <CardHeader>
               <InputWithButton />
-              <CheckBox />
             </CardHeader>
             <CardContent className="">
-              <ScrollAreaClubs />
+              <ScrollAreaEvents />
             </CardContent>
           </Card>
         </TabsContent>
   
-        <TabsContent value="password" className="h-full">
+        <TabsContent value="clubs" className="h-full">
           <Card className="h-[800px]">
             <CardHeader>
               <InputWithButton />
-              <CheckBox />
             </CardHeader>
             <CardContent className="h-screen">
               <ScrollAreaEvents />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="students" className="h-full">
+          <Card className="h-[800px]">
+            <CardHeader>
+              <InputWithButton />
+            </CardHeader>
+            <CardContent className="h-screen">
+              <ScrollAreaStudents />
             </CardContent>
           </Card>
         </TabsContent>
