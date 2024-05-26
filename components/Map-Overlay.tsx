@@ -136,6 +136,7 @@ export function ScrollAreaCards() {
   console.log(clubs);
   const allClubs: JSX.Element[] = clubs.map((club) => (
     <ClubCards
+      key={club.email}
       image={club.image_url}
       text={club.name}
       description={club.club_description}
@@ -185,7 +186,11 @@ export function ScrollAreaStudents() {
   return (
     <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
       {students?.map((student: any) => (
-        <StudentCards image={student.image_url} text={student.email} />
+        <StudentCards
+          key={student.email}
+          image={student.image_url}
+          text={student.email}
+        />
       ))}
     </ScrollArea>
   );
@@ -286,8 +291,8 @@ export function CollapsibleInsights() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      console.log("session: ", session);
-      console.log("session.user role: ", session.user.user_metadata.role);
+      // console.log("session: ", session);
+      // console.log("session.user role: ", session.user.user_metadata.role);
     });
 
     const {

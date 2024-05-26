@@ -34,7 +34,7 @@ export default function Map() {
   const [position, setPosition] = useState(centerPosition);
   const [events, setEvents] = useState([]);
   const { pos, setPos, isEdit, setIsEdit, eventId } = useContext(DataContext);
-  console.log(isEdit);
+  // console.log(isEdit);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,28 +101,40 @@ export default function Map() {
     [setPosition]
   );
 
-  console.log("posi:", position);
+  // console.log("posi:", position);
   async function handleSubmit() {
     const pin = {
       event_id: eventId,
       lat: position.lat,
       long: position.lng,
     };
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pin),
-      }
-    );
-    const data = await response.json();
-    console.log("ping:", data);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pin),
+        }
+      );
+      const data = await response.json();
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
+    // console.log("ping:", data);
   }
 
-  console.log("pos:", pos);
+  // console.log("pos:", pos);
 
   const toggleDraggable = () => {
     handleSubmit();

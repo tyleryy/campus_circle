@@ -31,7 +31,8 @@ export default function AuthButton() {
     return redirect("/login");
   };
 
-  return session?.user ? (
+  // session?.user
+  return false ? (
     <div className="flex items-center gap-4">
       Hey, {session.user.email}!
       <form action={signOut}>

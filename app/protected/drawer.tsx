@@ -77,7 +77,7 @@ async function uploadFile(file) {
   if (error) {
     console.log(error);
   } else {
-    console.log(data);
+    // console.log(data);
   }
 }
 
@@ -166,7 +166,7 @@ export function DrawerDemo() {
       console.error("Error:", error);
     }
   }
-  console.log(isEdit);
+  // console.log(isEdit);
 
   function formatDate(date: any) {
     let month = String(date.getMonth() + 1).padStart(2, "0");
