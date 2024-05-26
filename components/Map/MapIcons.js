@@ -7,11 +7,18 @@ import ping2 from "../../app/icons/ping2.png";
 import ping3 from "../../app/icons/ping3.png";
 import ping4 from "../../app/icons/ping4.png";
 import ping5 from "../../app/icons/ping5.png";
+import fly_Img from "../../app/icons/fly_img.png";
 
 export const dragIcon = L.icon({
   iconUrl: dropIcon.src,
   iconSize: [70, 70],
   iconAnchor: [35, 20],
+});
+
+export const flyImg = L.icon({
+  iconUrl: fly_Img.src,
+  iconSize: [1, 1],
+  iconAnchor: [1, 1],
 });
 
 export const ping0Icon = L.icon({

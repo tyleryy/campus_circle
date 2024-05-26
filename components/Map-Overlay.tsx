@@ -265,6 +265,8 @@ export function ScrollAreaEvents({ height }) {
             start={event.start_time}
             end={event.end_time}
             description={event.description}
+            lat = {event.lat}
+            long = {event.long}
           />
         );
       })}
@@ -298,8 +300,6 @@ export function CollapsibleInsights() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      // console.log("session: ", session);
-      // console.log("session.user role: ", session.user.user_metadata.role);
     });
 
     const {

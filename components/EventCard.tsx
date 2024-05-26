@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useState } from "react";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { Check } from "lucide-react";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Description } from "@radix-ui/react-dialog";
+import DataContext from "@/app/context/DataContext";
 
 export default function EventCard({
   image,
@@ -27,15 +28,24 @@ export default function EventCard({
   start,
   end,
   description,
+  lat,
+  long,
 }) {
-  const [rsvpClicked, setRsvpClicked] = React.useState(false);
+  const [rsvpClicked, setRsvpClicked] = useState(false);
+
+  const { focusLocation, setFocusLocation } = useContext(DataContext);
 
   const handleRsvpClick = () => {
     setRsvpClicked(true);
   };
 
   return (
-    <Card className="w-full mb-3 border-gray-600">
+    <Card
+      className="w-full mb-3 border-gray-600"
+      onClick={() => {
+        setFocusLocation({ lat, lng: long });
+      }}
+    >
       <img src={image} alt="event image" className="rounded-t-lg" />
       <div className="flex flex-row items-center bg-slate-800 rounded-b-lg">
         <div className="ml-5 h-20 w-16 bg-slate-900 rounded-lg items-center flex flex-col justify-center">
