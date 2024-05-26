@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
-import { MapPin } from "lucide-react";
-import { Check } from "lucide-react";
+import { MapPin, Check, SquareArrowOutUpRight } from "lucide-react";
 
 import {
   Card,
@@ -55,7 +54,9 @@ export default function EventCard({
         <CardHeader>
           <Popover>
             <PopoverTrigger>
-              <CardTitle className="text-left">{title}</CardTitle>
+              <CardTitle className="text-left flex flex-row">
+                {title} <SquareArrowOutUpRight />{" "}
+              </CardTitle>
             </PopoverTrigger>
             <PopoverContent className="rounded-2xl w-96 absolute -bottom-[200px] border-gray-600 border translate-x-[145px]">
               <Card className="border-transparent border bg-slate-800">
