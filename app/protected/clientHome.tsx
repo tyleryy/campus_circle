@@ -39,7 +39,7 @@ export default function ClientHome({ user }: { user: any }) {
       <main className="flex flex-col justify-center items-center h-screen">
         <div className="h-full w-full">
           <ResizablePanelGroup direction="horizontal" className="border">
-            <ResizablePanel defaultSize={5}>
+            <ResizablePanel defaultSize={5} minSize={10}>
               <div className="flex h-full items-center justify-center">
                 <span className="font-semibold"></span>
                 <NavBar />

@@ -1,7 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Image from "next/image";
-import { MapPin } from "lucide-react";
-import { Check } from "lucide-react";
+import { MapPin, Check, SquareArrowOutUpRight } from "lucide-react";
 
 import {
   Card,
@@ -19,7 +18,6 @@ import { Description } from "@radix-ui/react-dialog";
 import DataContext from "@/app/context/DataContext";
 
 export default function EventCard({
-  id,
   image,
   day,
   month,
@@ -32,32 +30,52 @@ export default function EventCard({
   lat,
   long,
   email,
+  role,
+  people,
 }) {
   const [rsvpClicked, setRsvpClicked] = useState(false);
 
-  const { focusLocation, setFocusLocation } = useContext(DataContext);
+  const { setFocusLocation } = useContext(DataContext);
 
   const handleRsvpClick = () => {
     setRsvpClicked(true);
     onSubmit();
   };
+  console.log(email, title);
+
+  const allPeople = people.map((person) => {
+    return (
+      <>
+        <div>
+          <h3>{person}</h3>
+        </div>
+      </>
+    );
+  });
 
   const onSubmit = async () => {
-    const student_info = {
+    const rsvp = {
       email: email,
-      event_id: id,
+      event_name: title,
     };
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rsvp/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(student_info),
+      body: JSON.stringify(rsvp),
     });
     const data = await response.json();
     console.log(data);
     // setIsOpen(false);
   };
+
+  useEffect(() => {
+    const d = people.includes(email);
+    setRsvpClicked(d);
+  }, [email, people]);
+
+  console.log(people, email, rsvpClicked);
 
   return (
     <Card
@@ -75,7 +93,9 @@ export default function EventCard({
         <CardHeader>
           <Popover>
             <PopoverTrigger>
-              <CardTitle className="text-left">{title}</CardTitle>
+              <CardTitle className="text-left flex flex-row">
+                {title} <SquareArrowOutUpRight />{" "}
+              </CardTitle>
             </PopoverTrigger>
             <PopoverContent className="rounded-2xl w-96 absolute -bottom-[200px] border-gray-600 border translate-x-[145px]">
               <Card className="border-transparent border bg-slate-800">
@@ -93,20 +113,29 @@ export default function EventCard({
                   </h2>
                   <h2 className="my-2">{description}</h2>
                 </div>
-                <Button
-                  onClick={handleRsvpClick}
-                  className={`w-full items-center duration-300 ${
-                    rsvpClicked ? "bg-green-500" : "bg-white hover:bg-cyan-400"
-                  }`}
-                >
-                  {rsvpClicked ? (
-                    <>
-                      <Check /> RSVP'd
-                    </>
-                  ) : (
-                    "RSVP"
-                  )}
-                </Button>
+                {role === "student" ? (
+                  <Button
+                    onClick={handleRsvpClick}
+                    className={`w-full items-center duration-300 ${
+                      rsvpClicked
+                        ? "bg-green-500"
+                        : "bg-white hover:bg-cyan-400"
+                    }`}
+                  >
+                    {rsvpClicked ? (
+                      <>
+                        <Check /> RSVP'd
+                      </>
+                    ) : (
+                      "RSVP"
+                    )}
+                  </Button>
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <h2 className="text-lg">People Attending</h2>
+                    {allPeople}
+                  </div>
+                )}
               </Card>
             </PopoverContent>
           </Popover>

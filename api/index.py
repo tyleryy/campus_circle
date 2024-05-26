@@ -6,6 +6,7 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
 from typing import List
+from ssl import create_default_context
 
 
 load_dotenv(verbose=True)
@@ -22,10 +23,6 @@ NEO_4J_URI = os.getenv("NEXT_PUBLIC_NEO_4J_URI")
 NEO_4J_USER = os.getenv("NEXT_PUBLIC_NEO_4J_USERNAME")
 NEO_4J_PASSWORD = os.getenv("NEXT_PUBLIC_NEO_4J_PASSWORD")
 
-HOST = os.getenv("MAIL_HOST")
-USERNAME = os.getenv("MAIL_USERNAME")
-PASSWORD = os.getenv("MAIL_PASSWORD")
-PORT = os.getenv("MAIL_PORT", 465)
 
 with GraphDatabase.driver(NEO_4J_URI, auth=(NEO_4J_USER, NEO_4J_PASSWORD)) as driver:
     driver.verify_connectivity()
@@ -74,15 +71,11 @@ class StudentInfo(BaseModel):
     club_description: str
     image_url: str
 
-class MailBody(BaseModel):
-    to: List[str]
-    subject: str
-    body: str
-
 class RSVP(BaseModel):
     email: str
-    event_id: int
+    event_name: str
 
+    
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
@@ -243,11 +236,11 @@ async def update_student_info(student_info: StudentInfo):
 @app.post("/api/rsvp")
 async def rsvp(rsvp: RSVP):
     email = rsvp.email
-    event_id = rsvp.event_id
+    event_name = rsvp.event_name
     try:
         query = f"""
         MATCH (e:Event)
-        WHERE ID(e) = {event_id}
+        WHERE e.name = '{event_name}'
         SET e.people = COALESCE(e.people, []) + ['{email}']
         RETURN e
         """
