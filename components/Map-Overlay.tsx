@@ -131,7 +131,7 @@ export function ScrollAreaCards() {
   ));
 
   return (
-    <ScrollArea className="w-full rounded-md h-5/6 pb-36">
+    <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
       {allClubs}
     </ScrollArea>
   );
@@ -171,7 +171,7 @@ export function ScrollAreaStudents() {
   }, []);
 
   return (
-    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+    <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
       {students?.map((student: any) => (
         <StudentCards image={student.image_url} text={student.email} />
       ))}
@@ -179,8 +179,11 @@ export function ScrollAreaStudents() {
   );
 }
 
-export function ScrollAreaEvents() {
+import PropTypes from "prop-types";
+
+export function ScrollAreaEvents({ height }) {
   const [events, setEvents] = useState([]);
+
   // Map month numbers to month names
   const monthNames = [
     "January",
@@ -196,6 +199,7 @@ export function ScrollAreaEvents() {
     "November",
     "December",
   ];
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
@@ -205,33 +209,17 @@ export function ScrollAreaEvents() {
     };
     fetchData();
   }, []);
+
   return (
-    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
+    <ScrollArea
+      className="w-full rounded-md overflow-y-auto"
+      style={{ height: `${height}px` }}
+    >
       {events.map((event) => {
         // Convert month string to an integer and map it to the corresponding month name
-        // Split the input date string into its components
         const [month, day, year] = event.date.split("-");
-
-        // Create a Date object using the parsed date components
         const date = new Date(`${year}-${month}-${day}`);
-
-        // Map month numbers to month names
-        const monthNames = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ];
-
-        // Map weekday numbers to weekday names
+        const monthName = monthNames[date.getMonth()];
         const weekdayNames = [
           "Sunday",
           "Monday",
@@ -241,9 +229,6 @@ export function ScrollAreaEvents() {
           "Friday",
           "Saturday",
         ];
-
-        // Get the month name and weekday name
-        const monthName = monthNames[date.getMonth()];
         const weekdayName = weekdayNames[date.getDay()];
         return (
           <EventCard
@@ -262,6 +247,10 @@ export function ScrollAreaEvents() {
     </ScrollArea>
   );
 }
+
+ScrollAreaEvents.propTypes = {
+  height: PropTypes.number.isRequired,
+};
 
 export function InputWithButton() {
   return (

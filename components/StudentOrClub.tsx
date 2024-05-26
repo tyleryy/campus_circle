@@ -31,10 +31,9 @@ import {
   CheckBox,
   ScrollAreaCards,
   ScrollAreaEvents,
+  ScrollAreaStudents,
   InputWithButton,
   CollapsibleEvents,
-  ScrollAreaMyEvents,
-  ScrollAreaStudentEvents,
 } from "./Map-Overlay";
 import profile from "@/app/profile.jpg";
 import { DrawerDemo } from "@/app/protected/drawer";
@@ -60,60 +59,12 @@ function StudentCards({ image, text }) {
   );
 }
 
-export function ScrollAreaStudents() {
-  return (
-    <ScrollArea className="w-full rounded-md pb-36 h-[825px]">
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-      <StudentCards image={profile.src} text="Alex Ngo" />
-    </ScrollArea>
-  );
-}
-
 export async function TabsClubsEvents() {
   const supabase = createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const config = [
-    {
-      image: humanities,
-      day: "25",
-      month: "MAY",
-      title: "BBA Dance",
-      location: "Humanities Hall",
-      weekday: "Fri",
-      start: "10:00AM",
-      end: "11:00AM",
-    },
-    {
-      image: humanities,
-      day: "26",
-      month: "MAY",
-      title: "BBA Dance",
-      location: "Humanities Hall",
-      weekday: "Fri",
-      start: "10:00AM",
-      end: "11:00AM",
-    },
-    {
-      image: humanities,
-      day: "25",
-      month: "MAY",
-      title: "BBA Dance",
-      location: "Humanities Hall",
-      weekday: "Fri",
-      start: "10:00AM",
-      end: "11:00AM",
-    },
-  ];
 
   return user.user_metadata.role === "student" ? (
     // Students
@@ -128,7 +79,7 @@ export async function TabsClubsEvents() {
       </TabsList>
       {/* 2 tabs */}
       <TabsContent value="account" className="">
-        <Card className="h-[800px]">
+        <Card className="">
           <CardHeader>
             <InputWithButton />
             <CheckBox />
@@ -139,14 +90,14 @@ export async function TabsClubsEvents() {
         </Card>
       </TabsContent>
 
-      <TabsContent value="password" className="h-full">
-        <Card className="h-[800px]">
+      <TabsContent value="password" className="">
+        <Card className="">
           <CardHeader>
             <InputWithButton />
             <CheckBox />
           </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaStudentEvents />
+          <CardContent className="">
+            <ScrollAreaEvents height={675} />
           </CardContent>
         </Card>
       </TabsContent>
@@ -172,8 +123,8 @@ export async function TabsClubsEvents() {
             <InputWithButton />
             <DrawerDemo />
           </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaMyEvents />
+          <CardContent className="">
+            <ScrollAreaEvents height={600} />
           </CardContent>
         </Card>
       </TabsContent>
@@ -183,18 +134,18 @@ export async function TabsClubsEvents() {
           <CardHeader>
             <InputWithButton />
           </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaEvents />
+          <CardContent>
+            <ScrollAreaEvents height={690} />
           </CardContent>
         </Card>
       </TabsContent>
 
       <TabsContent value="students" className="h-full">
-        <Card className="h-[800px]">
+        <Card className="">
           <CardHeader>
             <InputWithButton />
           </CardHeader>
-          <CardContent className="h-screen">
+          <CardContent className="mb-3">
             <ScrollAreaStudents />
           </CardContent>
         </Card>
