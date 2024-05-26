@@ -70,8 +70,7 @@ async def health():
 async def create_user(user: User):
     role = "Student" if user.user_type == "student" else "Club"
     try:
-        query = f"CREATE (s:{role} {{email: '{user.email}', password: '{user.password}', user_points: 0}})\
-                    RETURN s"
+        query = f"""CREATE (s:{role} {{email: '{user.email}', password: '{user.password}', user_points: 0, club_description: '', image_url: '', name: '' }}) RETURN s"""
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
