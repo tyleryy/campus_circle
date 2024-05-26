@@ -208,7 +208,7 @@ export default function NavBar() {
               {session?.user.user_metadata?.role}!
             </PopoverContent>
           </Popover> */}
-          <div className="text-lg font-bold">Club</div>
+          <div className="text-sm text-center font-bold">Club</div>
         </Link>
 
         <ClubDialog
