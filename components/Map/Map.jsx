@@ -163,7 +163,7 @@ export default function Map() {
       minZoom={15}
       scrollWheelZoom={false}
       zoomControl={false}
-      style={{ height: "1000px", width: "5000px" }}
+      style={{ height: "1050px", width: "5000px" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

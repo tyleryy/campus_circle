@@ -76,8 +76,7 @@ async def health():
 async def create_user(user: User):
     role = "Student" if user.user_type == "student" else "Club"
     try:
-        query = f"CREATE (s:{role} {{email: '{user.email}', password: '{user.password}', user_points: 0}})\
-                    RETURN s"
+        query = f"""CREATE (s:{role} {{email: '{user.email}', password: '{user.password}', user_points: 0, club_description: '', image_url: '', name: '' }}) RETURN s"""
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
@@ -87,6 +86,26 @@ async def create_user(user: User):
 async def get_events():
     try:
         query = "MATCH (e:Event) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+ 
+@app.get("/api/students")
+async def get_students():
+    try:
+        query = "MATCH (e:Student) RETURN e"
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "events": list(records)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+    
+
+@app.get("/api/topStudents")
+async def get_students():
+    try:
+        query = "MATCH (s:Student) RETURN s.email ORDER BY s.user_points DESC"
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:

@@ -180,11 +180,14 @@ export function DrawerDemo() {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <div className="flex flex-row">
-          <div className="bg-slate-700 p-3 rounded-sm gap-5 flex items-center w-2/3">
-            <Button variant="outline">
+          <div className="border-gray-600 border bg-slate-800 mt-4 px-5 py-3 rounded-sm gap-5 flex items-center w-full">
+            <Button
+              variant="outline"
+              className="hover:text-black duration-300 hover:bg-cyan-400"
+            >
               <Plus />
             </Button>
-            <Label>Create Event</Label>
+            <Label className="text-lg">Create an Event</Label>
           </div>
         </div>
       </DrawerTrigger>

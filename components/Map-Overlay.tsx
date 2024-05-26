@@ -3,8 +3,9 @@
 import * as React from "react";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
-import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Trophy, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -19,15 +20,18 @@ import { Label } from "@/components/ui/label";
 import { Send } from "lucide-react";
 import ctc from "../app/ctc_logo.png";
 import hack from "../app/hack-at-uci-logo_black.png";
+import humanities from "../app/humanities.jpg";
 import Image from "next/image";
 import { DrawerDemo } from "@/app/protected/drawer";
-
+import { Switch } from "@/components/ui/switch";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import EventCard from "./EventCard";
 
 const frameworks = [
   {
@@ -68,30 +72,51 @@ export function CheckBox() {
   );
 }
 
+// return (
+//   <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
+//     <div className='h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1'>
+//         {image && <Image width={100} height={100} src={image} alt="Card" className="rounded-lg p-1 w-20 bg-neutral-100" />}
+//     </div>
+//     <div className='ml-5 text-neutral-100 flex-col'>
+//       <h3 className="text-lg font-semibold">{text}</h3>
+//       <p className="text-sm text-gray-600">{description}</p>
+//     </div>
+
+const InClub = ({ className, ...props }) => {
+  return (
+    <div className={` ${className}`} {...props}>
+      <Switch id="JoinClub" className="border border-neutral-200" />
+    </div>
+  );
+};
+
 function ClubCards({ image, text, description }) {
   return (
-    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-2">
+    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
       <div className="h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1">
         {image && (
-          <Image
+          <img
             width={100}
             height={100}
-            src={image.src}
+            src={image}
             alt="Card"
             className="rounded-lg p-1 w-20 bg-neutral-100"
           />
         )}
       </div>
-      <div className="ml-5 text-neutral-100 flex-col">
-        <h3 className="text-lg font-semibold">
-          {text?.length > 25 ? `${text.slice(0, 25)}...` : text}
-        </h3>
-        <p className="text-sm text-gray-600">
-          {description?.length > 25
-            ? `${description.slice(0, 25)}...`
-            : description}
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="ml-5 text-neutral-200 flex-col flex">
+          <h3 className="text-lg font-semibold">
+            {text?.length > 25 ? `${text.slice(0, 25)}...` : text}
+          </h3>
+          <p className="text-sm text-gray-600">
+            {description?.length > 25
+              ? `${description.slice(0, 25)}...`
+              : description}
+          </p>
+        </div>
       </div>
+      <InClub className="ml-auto" />
     </div>
   );
 }
@@ -118,11 +143,126 @@ export function ScrollAreaCards() {
   ));
 
   return (
-    <ScrollArea className="w-full rounded-md h-5/6 pb-36">
+    <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
       {allClubs}
     </ScrollArea>
   );
 }
+
+function StudentCards({ image, text }) {
+  return (
+    <div className="flex bg-slate-800 rounded-lg shadow-md p-4 items-center mb-3 text-gray-600">
+      <div className="h-16 w-16 bg-neutral-100 rounded-lg items-center flex p-1">
+        {image && (
+          <img
+            src={image}
+            alt="Card"
+            className="rounded-lg w-20 bg-neutral-100"
+          />
+        )}
+      </div>
+      <div className="ml-5 text-neutral-100 flex-col">
+        <h3 className="text-lg font-semibold">{text}</h3>
+      </div>
+    </div>
+  );
+}
+
+export function ScrollAreaStudents() {
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/students`
+      );
+      const data = await response.json();
+      const flattenedStudents = data.events.flat();
+      setStudents(flattenedStudents);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
+      {students?.map((student: any) => (
+        <StudentCards image={student.image_url} text={student.email} />
+      ))}
+    </ScrollArea>
+  );
+}
+
+import PropTypes from "prop-types";
+
+export function ScrollAreaEvents({ height }) {
+  const [events, setEvents] = useState([]);
+
+  // Map month numbers to month names
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <ScrollArea
+      className="w-full rounded-md overflow-y-auto"
+      style={{ height: `${height}px` }}
+    >
+      {events.map((event) => {
+        // Convert month string to an integer and map it to the corresponding month name
+        const [month, day, year] = event.date.split("-");
+        const date = new Date(`${year}-${month}-${day}`);
+        const monthName = monthNames[date.getMonth()];
+        const weekdayNames = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const weekdayName = weekdayNames[date.getDay()];
+        return (
+          <EventCard
+            key={event.id}
+            image={event.image}
+            day={day}
+            month={monthName}
+            title={event.name}
+            location={event.location}
+            weekday={weekdayName}
+            start={event.start_time}
+            end={event.end_time}
+          />
+        );
+      })}
+    </ScrollArea>
+  );
+}
+
+ScrollAreaEvents.propTypes = {
+  height: PropTypes.number.isRequired,
+};
 
 export function InputWithButton() {
   return (
@@ -136,7 +276,20 @@ export function InputWithButton() {
 }
 
 export function CollapsibleInsights() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [topThree, setTopThree] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/topStudents`
+      );
+      const data = await response.json();
+      const topThreeData = data.events.flat().slice(0, 3);
+      setTopThree(topThreeData);
+    };
+    fetchData();
+  }, []);
 
   return (
     <Collapsible
@@ -144,7 +297,7 @@ export function CollapsibleInsights() {
       onOpenChange={setIsOpen}
       className="w-[350px] space-y-2"
     >
-      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-800 rounded-md">
+      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-900 rounded-md">
         <h4 className="text-sm font-semibold">Insights</h4>
         <CollapsibleTrigger
           asChild
@@ -156,14 +309,46 @@ export function CollapsibleInsights() {
           </Button>
         </CollapsibleTrigger>
       </div>
-      <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          INSERT HERE
-        </div>
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          INSERT HERE
-        </div>
-      </CollapsibleContent>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="insights"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="transition-opacity duration-1000"
+          >
+            <CollapsibleContent className="space-y-2">
+              {topThree.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1 }}
+                  className={`transition-opacity duration-1000 rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle ${
+                    index === 0 ? "border-cyan-400 border-4" : ""
+                  }`}
+                >
+                  <div
+                    className={`rounded-lg p-1 w-10 text-black flex justify-center ${
+                      index === 0 ? "bg-cyan-400" : "bg-neutral-100"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                  <div className="ml-3 gap-[140px] flex flex-row items-center">
+                    {item}
+                    {index === 0 && <Trophy className="stroke-cyan-400" />}
+                  </div>
+                </motion.div>
+              ))}
+            </CollapsibleContent>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Collapsible>
   );
 }
@@ -177,9 +362,7 @@ export function CollapsibleEvents() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
       const data = await response.json();
       const flattenedEvents = data.events.flat();
-      // console.log(flattenedEvents);
       const filteredEvents = flattenedEvents
-        .flat()
         .filter((event) => new Date(event.date) >= new Date())
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .slice(0, 2);
@@ -188,12 +371,12 @@ export function CollapsibleEvents() {
     fetchData();
   }, []);
 
-  console.log("2: ", events);
-  const allEvents: JSX.Element[] = events.map((club) => (
+  const allEvents: JSX.Element[] = events.map((event) => (
     <ClubCards
-      image={club.image}
-      text={club.name}
-      description={club.description}
+      key={event.id}
+      image={event.image}
+      text={event.name}
+      description={event.description}
     />
   ));
 
@@ -203,7 +386,7 @@ export function CollapsibleEvents() {
       onOpenChange={setIsOpen}
       className="w-[350px] space-y-2"
     >
-      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-800 rounded-md">
+      <div className="flex items-center justify-between space-x-4 px-4 text-white bg-slate-900 rounded-md">
         <h4 className="text-sm font-semibold">Upcoming Events</h4>
         <CollapsibleTrigger
           asChild
@@ -216,55 +399,32 @@ export function CollapsibleEvents() {
         </CollapsibleTrigger>
       </div>
 
-      <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[0]}
-        </div>
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          {allEvents[1]}
-        </div>
-      </CollapsibleContent>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="events"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <CollapsibleContent className="space-y-2">
+              {allEvents.map((event, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800"
+                >
+                  {event}
+                </motion.div>
+              ))}
+            </CollapsibleContent>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Collapsible>
-  );
-}
-
-export function TabsClubsEvents() {
-  return (
-    <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account" className="font-semibold">
-          Clubs
-        </TabsTrigger>
-        <TabsTrigger value="events" className="font-semibold">
-          Events
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="account" className="h-full">
-        <Card className="h-screen">
-          <CardHeader>
-            <InputWithButton />
-            <CheckBox />
-          </CardHeader>
-          <CardContent className="h-screen">
-            <ScrollAreaCards />
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-      <TabsContent value="events">
-        <Card>
-          <CardHeader>
-            <CardTitle>Events</CardTitle>
-            <CardDescription>List of Events</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <DrawerDemo />
-          </CardContent>
-          {/* <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter> */}
-        </Card>
-      </TabsContent>
-    </Tabs>
   );
 }
