@@ -84,11 +84,9 @@ const LandingPage: React.FC = () => {
           direction="left"
         />
       </div>
+      <AnimatedText text="Key Features" />
       <div>
         <CardHoverEffectDemo />
-      </div>
-      <div className="w-3/5">
-        <LandingAccordion />
       </div>
       <div className="w-full">
         <GlobeDemo />

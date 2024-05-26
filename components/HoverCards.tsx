@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import Image, { StaticImageData } from "next/image";
 
 export const HoverEffect = ({
   items,
@@ -10,8 +11,7 @@ export const HoverEffect = ({
 }: {
   items: {
     title: string;
-    description: string;
-    link: string;
+    image: StaticImageData;
   }[];
   className?: string;
 }) => {
@@ -26,8 +26,8 @@ export const HoverEffect = ({
     >
       {items.map((item, idx) => (
         <Link
-          href={item?.link}
-          key={item?.link}
+          href={item?.image}
+          key={item?.image}
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -50,8 +50,13 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
+            <Image
+              src={item.image}
+              alt={item.title}
+              width={300}
+              className="rounded-lg"
+            ></Image>
             <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
           </Card>
         </Link>
       ))}

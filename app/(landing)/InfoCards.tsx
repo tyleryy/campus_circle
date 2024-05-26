@@ -1,47 +1,39 @@
 import { HoverEffect } from "@/components/HoverCards";
+import planAheadImage from "@/app/plan_ahead_feature_image.png";
+import mapImage from "@/app/map_image.png";
+import clubCardImage from "@/app/club_cards_image.png";
 
 export function CardHoverEffectDemo() {
   return (
     <div className="max-w-5xl mx-auto px-8">
-      <HoverEffect items={projects} />
+      <HoverEffect items={features} />
     </div>
   );
 }
-export const projects = [
+export const features = [
   {
-    title: "Stripe",
-    description:
-      "A technology company that builds economic infrastructure for the internet.",
-    link: "https://stripe.com",
+    title: "Plan Ahead",
+    image: planAheadImage,
   },
   {
-    title: "Netflix",
-    description:
-      "A streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.",
-    link: "https://netflix.com",
+    title: "View Club Events",
+    image: mapImage,
   },
   {
-    title: "Google",
-    description:
-      "A multinational technology company that specializes in Internet-related services and products.",
-    link: "https://google.com",
+    title: "RSVP to Events",
+    image: clubCardImage,
   },
   {
-    title: "Meta",
-    description:
-      "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-    link: "https://meta.com",
+    title: "Boost Spirit",
+    image: planAheadImage,
   },
   {
-    title: "Amazon",
-    description:
-      "A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.",
-    link: "https://amazon.com",
+    title: "Create Event Graphics",
+    image: planAheadImage,
   },
   {
-    title: "Microsoft",
-    description:
-      "A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.",
-    link: "https://microsoft.com",
+    title: "Grow your Network",
+    image: planAheadImage,
   },
+
 ];
