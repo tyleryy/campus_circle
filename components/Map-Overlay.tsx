@@ -32,6 +32,11 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import EventCard from "./EventCard";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const frameworks = [
   {
@@ -197,6 +202,7 @@ export function ScrollAreaStudents() {
 }
 
 import PropTypes from "prop-types";
+import { Description } from "@radix-ui/react-dialog";
 
 export function ScrollAreaEvents({ height }) {
   const [events, setEvents] = useState([]);
@@ -258,6 +264,7 @@ export function ScrollAreaEvents({ height }) {
             weekday={weekdayName}
             start={event.start_time}
             end={event.end_time}
+            description={event.description}
           />
         );
       })}

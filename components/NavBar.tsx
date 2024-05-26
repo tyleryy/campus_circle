@@ -157,20 +157,16 @@ export default function NavBar() {
       <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <div className="py-6 text-lg flex flex-col items-center">
         <span className="text-3xl">{day}</span>
         <span>{month}</span>
       </div>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="/" className="py-6">
         <ButtonIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="#" className="py-6">
         <UserIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <Link
         href="https://calendar.google.com/"
@@ -179,12 +175,10 @@ export default function NavBar() {
       >
         <MapIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <Link href="#" className="py-6">
         <CalIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
