@@ -173,7 +173,6 @@ export default function Map() {
       center={[33.64513592505738, -117.82476533065436]}
       zoom={17}
       minZoom={15}
-      scrollWheelZoom={false}
       zoomControl={false}
       style={{ height: "1050px", width: "5000px" }}
     >
