@@ -167,7 +167,8 @@ async def create_event(event: Event):
             type: '{event.type}', \
             long: '{event.long}', \
             lat: '{event.lat}', \
-            email: '{event.email}' \
+            email: '{event.email}', \
+            people: []\
         }})<-[r:RUNNING]-(c:Club {{email: '{event.email}'}}) RETURN ID(n) \
         "
         
