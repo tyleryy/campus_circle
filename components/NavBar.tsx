@@ -128,7 +128,6 @@ export default function NavBar() {
       >
         <CalIcon />
       </Link>
-      {/* <AuthButton /> */}
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
           <ModeToggle />
@@ -186,9 +185,6 @@ export default function NavBar() {
         <CalIcon />
       </Link>
       <Separator className="border-[0.5px] border-neutral-200" />
-
-      {/* <AuthButton /> */}
-      {/* <Separator className="border-[0.5px] border-neutral-200" /> */}
 
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
