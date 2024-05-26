@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Image from "next/image";
 import { MapPin, Check, SquareArrowOutUpRight } from "lucide-react";
 
@@ -29,14 +29,53 @@ export default function EventCard({
   description,
   lat,
   long,
+  email,
+  role,
+  people,
 }) {
   const [rsvpClicked, setRsvpClicked] = useState(false);
 
-  const { focusLocation, setFocusLocation } = useContext(DataContext);
+  const { setFocusLocation } = useContext(DataContext);
 
   const handleRsvpClick = () => {
     setRsvpClicked(true);
+    onSubmit();
   };
+  console.log(email, title);
+
+  const allPeople = people.map((person) => {
+    return (
+      <>
+        <div>
+          <h3>{person}</h3>
+        </div>
+      </>
+    );
+  });
+
+  const onSubmit = async () => {
+    const rsvp = {
+      email: email,
+      event_name: title,
+    };
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rsvp/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rsvp),
+    });
+    const data = await response.json();
+    console.log(data);
+    // setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const d = people.includes(email);
+    setRsvpClicked(d);
+  }, [email, people]);
+
+  console.log(people, email, rsvpClicked);
 
   return (
     <Card
@@ -74,20 +113,29 @@ export default function EventCard({
                   </h2>
                   <h2 className="my-2">{description}</h2>
                 </div>
-                <Button
-                  onClick={handleRsvpClick}
-                  className={`w-full items-center duration-300 ${
-                    rsvpClicked ? "bg-green-500" : "bg-white hover:bg-cyan-400"
-                  }`}
-                >
-                  {rsvpClicked ? (
-                    <>
-                      <Check /> RSVP'd
-                    </>
-                  ) : (
-                    "RSVP"
-                  )}
-                </Button>
+                {role === "student" ? (
+                  <Button
+                    onClick={handleRsvpClick}
+                    className={`w-full items-center duration-300 ${
+                      rsvpClicked
+                        ? "bg-green-500"
+                        : "bg-white hover:bg-cyan-400"
+                    }`}
+                  >
+                    {rsvpClicked ? (
+                      <>
+                        <Check /> RSVP'd
+                      </>
+                    ) : (
+                      "RSVP"
+                    )}
+                  </Button>
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <h2 className="text-lg">People Attending</h2>
+                    {allPeople}
+                  </div>
+                )}
               </Card>
             </PopoverContent>
           </Popover>

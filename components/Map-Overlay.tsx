@@ -233,12 +233,30 @@ export function ScrollAreaEvents({ height }) {
     fetchData();
   }, []);
 
+  const supabase = createClient();
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <ScrollArea
       className="w-full rounded-md overflow-y-auto"
       style={{ height: `${height}px` }}
     >
       {events.map((event) => {
+        console.log(event);
         // Convert month string to an integer and map it to the corresponding month name
         const [month, day, year] = event.date.split("-");
         const date = new Date(`${year}-${month}-${day}`);
@@ -265,8 +283,11 @@ export function ScrollAreaEvents({ height }) {
             start={event.start_time}
             end={event.end_time}
             description={event.description}
-            lat = {event.lat}
-            long = {event.long}
+            lat={event.lat}
+            long={event.long}
+            people={event.people}
+            email={session?.user.email}
+            role={session?.user.user_metadata?.role}
           />
         );
       })}
