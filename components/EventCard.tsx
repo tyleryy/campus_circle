@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import {
   Popover,
   PopoverContent,
@@ -88,7 +87,6 @@ export default function EventCard({
           <h2 className="text-sm">
             {weekday} {start} - {end}
           </h2>
-          <Switch id="JoinClub" className="border border-neutral-200" />
         </CardHeader>
       </div>
     </Card>
