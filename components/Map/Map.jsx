@@ -17,6 +17,7 @@ import {
   ping3Icon,
   ping4Icon,
   ping5Icon,
+  flyImg,
 } from "./MapIcons";
 import DataContext from "@/app/context/DataContext";
 // END: Preserve spaces to avoid auto-sorting
@@ -26,6 +27,7 @@ import {
   Popup,
   TileLayer,
   useMapEvents,
+  useMap,
 } from "react-leaflet";
 
 export default function Map() {
@@ -33,8 +35,15 @@ export default function Map() {
   // const [isEdit, setIsEdit] = useState(true);
   const [position, setPosition] = useState(centerPosition);
   const [events, setEvents] = useState([]);
-  const { pos, setPos, isEdit, setIsEdit, eventId } = useContext(DataContext);
-  console.log(isEdit);
+  const {
+    pos,
+    setPos,
+    isEdit,
+    setIsEdit,
+    eventId,
+    focusLocation,
+    setFocusLocation,
+  } = useContext(DataContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +54,16 @@ export default function Map() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const handleFocus = async () => {
+      setFocusLocation(null);
+    };
+
+    if (focusLocation) {
+      handleFocus();
+    }
+  }, [focusLocation, setFocusLocation]);
 
   function generatePingIcon(date) {
     const currentDate = new Date();
@@ -101,33 +120,62 @@ export default function Map() {
     [setPosition]
   );
 
-  console.log("posi:", position);
+  // console.log("posi:", position);
   async function handleSubmit() {
     const pin = {
       event_id: eventId,
       lat: position.lat,
       long: position.lng,
     };
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pin),
-      }
-    );
-    const data = await response.json();
-    console.log("ping:", data);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pin),
+        }
+      );
+      const data = await response.json();
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
+    // console.log("ping:", data);
   }
 
-  console.log("pos:", pos);
+  // console.log("pos:", pos);
 
   const toggleDraggable = () => {
     handleSubmit();
     setIsEdit(!isEdit);
   };
+
+  function MapFocusLocation({ location }) {
+    const map = useMap();
+    if (location) {
+      map.flyTo(
+        {
+          lat: parseFloat(location.lat) - 0.0008,
+          lng: parseFloat(location.lng) + 0.008,
+        },
+        18
+      );
+    }
+
+    return location ? (
+      <Marker position={location} icon={flyImg}></Marker> // ? there is no fly image??
+    ) : null;
+  }
 
   const NewItemMarker = () => {
     useMapEvents({
@@ -161,7 +209,6 @@ export default function Map() {
       center={[33.64513592505738, -117.82476533065436]}
       zoom={17}
       minZoom={15}
-      scrollWheelZoom={false}
       zoomControl={false}
       style={{ height: "1050px", width: "5000px" }}
     >
@@ -172,6 +219,7 @@ export default function Map() {
         // Dark Mode:  "https://api.mapbox.com/styles/v1/ghosnm/ckzq73c69001414nve9hlcx9d/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZ2hvc25tIiwiYSI6ImNrenE2eTZqcjM1N2oyb3FyeXBkaGwzMHoifQ.Y1Fk71N1-mAY4AAmXHAt6Q"
       />
       {allMarkers}
+      {!isEdit && <MapFocusLocation location={focusLocation} />}
       {isEdit ? <NewItemMarker /> : null}
     </MapContainer>
   );

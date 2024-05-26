@@ -1,3 +1,4 @@
+"use client";
 import { Home } from "lucide-react";
 import { Users } from "lucide-react";
 import { MapPinned } from "lucide-react";
@@ -102,6 +103,10 @@ export default function NavBar() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // useEffect(() => {
+  //   console.log("session:", session);
+  // }, [session]);
+
   return session?.user.user_metadata?.role === "student" ? (
     <nav className="h-full w-full bg-slate-800 text-neutral-200 flex flex-col items-center">
       <Link href="#" className="pt-12 pb-6">
@@ -127,7 +132,6 @@ export default function NavBar() {
       >
         <CalIcon />
       </Link>
-      <AuthButton />
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
           <ModeToggle />
@@ -157,20 +161,16 @@ export default function NavBar() {
       <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <div className="py-6 text-lg flex flex-col items-center">
         <span className="text-3xl">{day}</span>
         <span>{month}</span>
       </div>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="/" className="py-6">
         <ButtonIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="#" className="py-6">
         <UserIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <Link
         href="https://calendar.google.com/"
@@ -179,15 +179,10 @@ export default function NavBar() {
       >
         <MapIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <Link href="#" className="py-6">
         <CalIcon />
       </Link>
-      <Separator className="border-[0.5px] border-neutral-200" />
-
-      <AuthButton />
-      <Separator className="border-[0.5px] border-neutral-200" />
 
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">

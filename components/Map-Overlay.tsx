@@ -32,6 +32,11 @@ import {
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import EventCard from "./EventCard";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const frameworks = [
   {
@@ -136,6 +141,7 @@ export function ScrollAreaCards() {
   console.log(clubs);
   const allClubs: JSX.Element[] = clubs.map((club) => (
     <ClubCards
+      key={club.email}
       image={club.image_url}
       text={club.name}
       description={club.club_description}
@@ -185,13 +191,18 @@ export function ScrollAreaStudents() {
   return (
     <ScrollArea className="w-full rounded-md overflow-y-auto h-[675px]">
       {students?.map((student: any) => (
-        <StudentCards image={student.image_url} text={student.email} />
+        <StudentCards
+          key={student.email}
+          image={student.image_url}
+          text={student.email}
+        />
       ))}
     </ScrollArea>
   );
 }
 
 import PropTypes from "prop-types";
+import { Description } from "@radix-ui/react-dialog";
 
 export function ScrollAreaEvents({ height }) {
   const [events, setEvents] = useState([]);
@@ -253,6 +264,9 @@ export function ScrollAreaEvents({ height }) {
             weekday={weekdayName}
             start={event.start_time}
             end={event.end_time}
+            description={event.description}
+            lat = {event.lat}
+            long = {event.long}
           />
         );
       })}

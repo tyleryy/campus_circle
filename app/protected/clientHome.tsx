@@ -19,6 +19,7 @@ export default function ClientHome({ user }: { user: any }) {
   const [isEdit, setIsEdit] = useState(false);
   const [pos, setPos] = useState({ lat: 0, lng: 0 });
   const [eventId, setEventId] = useState("");
+  const [focusLocation, setFocusLocation] = useState(null);
   const createLocation = () => {};
 
   return (
@@ -31,6 +32,8 @@ export default function ClientHome({ user }: { user: any }) {
         createLocation,
         eventId,
         setEventId,
+        focusLocation,
+        setFocusLocation,
       }}
     >
       <main className="flex flex-col justify-center items-center h-screen">

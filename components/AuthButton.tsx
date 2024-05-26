@@ -22,16 +22,17 @@ export default function AuthButton() {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log("session", session);
-  }, [session]);
+  // useEffect(() => {
+  //   console.log("session", session);
+  // }, [session]);
   const signOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     return redirect("/login");
   };
 
-  return session?.user ? (
+  // session?.user
+  return false ? (
     <div className="flex items-center gap-4">
       Hey, {session.user.email}!
       <form action={signOut}>

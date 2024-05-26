@@ -80,7 +80,10 @@ const LandingPage: React.FC = () => {
       <div className="w-full h-full">
         <AuroraBackgroundDemo />
       </div>
-      <AnimatedText text="Our Satisfied Users" />
+      <AnimatedText
+        className="font-extralight md:text-4xl"
+        text="Our Satisfied Users"
+      />
       <div className="mb-36">
         <InfiniteMovingCards
           items={cardConfig}
@@ -95,7 +98,7 @@ const LandingPage: React.FC = () => {
           direction="left"
         />
       </div>
-      <AnimatedText text="Questions" />
+      <AnimatedText className="font-extralight md:text-4xl" text="Questions" />
       <div className="w-5/6">
         <LandingAccordion />
       </div>

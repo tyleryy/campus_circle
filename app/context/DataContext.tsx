@@ -9,6 +9,10 @@ const DataContext = createContext({
   createLocation: (() => {}) as () => void,
   eventId: "",
   setEventId: (() => {}) as Dispatch<SetStateAction<string>>,
+  focusLocation: {},
+  setFocusLocation: (() => {}) as Dispatch<
+    SetStateAction<{ lat: number; lng: number }>
+  >,
 });
 
 export default DataContext;
