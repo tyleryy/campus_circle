@@ -54,7 +54,7 @@ export default function EventCard({
         <CardHeader>
           <Popover>
             <PopoverTrigger>
-              <CardTitle className="text-left flex flex-row">
+              <CardTitle className="text-left flex flex-row gap-2">
                 {title} <SquareArrowOutUpRight />{" "}
               </CardTitle>
             </PopoverTrigger>
