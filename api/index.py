@@ -116,7 +116,7 @@ async def get_events():
         return {"status": "error", "error": str(e)}
 
 
-@app.get("/api/topClub")
+@app.get("/api/topClubs")
 async def get_students():
     try:
         query = "MATCH (c:Club) RETURN c.name ORDER BY c.club_points DESC"
