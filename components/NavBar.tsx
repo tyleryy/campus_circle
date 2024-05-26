@@ -20,6 +20,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import ClubDialog from "./ClubDialog";
+import StudentDialog from "./StudentDialog";
 
 function getCurrentDayAndMonth() {
   const date = new Date();
@@ -83,6 +85,8 @@ export default function NavBar() {
 
   const supabase = createClient();
   const [session, setSession] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isStudentOpen, setIsStudentOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -133,19 +137,19 @@ export default function NavBar() {
         </Link>
         <Link
           href="#"
-          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2"
+          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 flex-col items-center"
+          onClick={() => {
+            setIsStudentOpen(true);
+          }}
         >
           <ProfileIcon />
-          <Popover>
-            <PopoverTrigger className="text-sm font-bold">
-              Student
-            </PopoverTrigger>
-            <PopoverContent>
-              Hey, {session.user.email}! You are a{" "}
-              {session.user.user_metadata.role}!
-            </PopoverContent>
-          </Popover>
+          <div className="text-sm font-bold">Student</div>
         </Link>
+        <StudentDialog
+          email={session?.user.user_metadata?.email}
+          isOpen={isStudentOpen}
+          setIsOpen={setIsStudentOpen}
+        />
       </div>
     </nav>
   ) : (
@@ -196,17 +200,27 @@ export default function NavBar() {
 
         <Link
           href="#"
-          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 py-1"
+          className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 py-1 flex-col"
+          onClick={() => {
+            setIsOpen(true);
+          }}
         >
           <ProfileIcon />
-          <Popover>
+          {/* <Popover>
             <PopoverTrigger className="text-sm font-bold">Club</PopoverTrigger>
             <PopoverContent>
               Hey, {session?.user.email}! You are a{" "}
               {session?.user.user_metadata?.role}!
             </PopoverContent>
-          </Popover>
+          </Popover> */}
+          <div className="text-lg font-bold">Club</div>
         </Link>
+
+        <ClubDialog
+          email={session?.user.user_metadata?.email}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
       </div>
     </nav>
   );

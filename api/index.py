@@ -57,6 +57,16 @@ class Pin(BaseModel):
     lat: float
     long: float
 
+class ClubInfo(BaseModel):
+    club_email: str
+    club_description: str
+    image_url: str
+
+class StudentInfo(BaseModel):
+    student_email: str
+    club_description: str
+    image_url: str
+
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
@@ -174,4 +184,41 @@ async def update_event_location(pin: Pin):
         return {"status": "ok", "event": records[0]}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+    
+@app.post("/api/updateClubInfo")
+async def update_club_info(club_info: ClubInfo):
+    try:
+        club_email = club_info.club_email
+        club_description = club_info.club_description
+        image_url = club_info.image_url
+        
+        query = f"""
+        MATCH (c:Club)
+        WHERE c.email = '{club_email}'
+        SET c.club_description = '{club_description}', c.image_url = '{image_url}'
+        RETURN c
+        """
+        
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "club": records[0]}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
+@app.post("/api/updateStudentInfo")
+async def update_student_info(student_info: StudentInfo):
+    try:
+        student_email = student_info.student_email
+        club_description = student_info.club_description
+        image_url = student_info.image_url
+        
+        query = f"""
+        MATCH (s:Student)
+        WHERE s.email = '{student_email}'
+        SET s.club_description = '{club_description}', s.image_url = '{image_url}'
+        RETURN s
+        """
+        
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "student": records[0]}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
