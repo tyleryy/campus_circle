@@ -58,8 +58,8 @@ const formSchema = z.object({
   startTime: z.string(),
   endTime: z.string(),
   location: z.string(),
-  longitude: z.number(),
-  latitude: z.number(),
+  longitude: z.string(),
+  latitude: z.string(),
   eventType: z.string(),
 });
 
@@ -74,23 +74,53 @@ export function DrawerDemo() {
       startTime: "",
       endTime: "",
       location: "",
-      longitude: 0.0,
-      latitude: 0.0,
+      longitude: "",
+      latitude: "",
       eventType: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Convert date to a string in the required format
+    const formattedDate = formatDate(values.date);
 
-    // TODO convert date to a string here
-    console.log(values);
+    const eventData = {
+      name: values.name,
+      description: values.description,
+      date: formattedDate,
+      start_time: values.startTime,
+      end_time: values.endTime,
+      location: values.location,
+      long: values.longitude,
+      lat: values.latitude,
+      type: values.eventType,
+      image: "img.png",
+    };
+
+    console.log("submitted: ", eventData);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/createEvents`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(eventData),
+        }
+      );
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
-  function formatDate(date) {
-    let month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  function formatDate(date: any) {
+    let month = String(date.getMonth() + 1).padStart(2, "0");
     let day = String(date.getDate()).padStart(2, "0");
     let year = date.getFullYear();
 

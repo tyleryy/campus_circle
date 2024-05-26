@@ -39,6 +39,17 @@ class User(BaseModel):
     password: str
     user_type: str  # 'club' or 'student'
 
+class Event(BaseModel):
+    name: str
+    description: str
+    date: str  # or datetime if needed
+    start_time: str
+    end_time: str
+    location: str
+    long: str
+    lat: str
+    type: str
+    image: str = "img.png"
 
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
@@ -84,3 +95,28 @@ async def get_events():
         return {"status": "ok", "events": list(records)}
     except Exception as e:
         return {"status": "error", "error": str(e)}
+
+@app.post("/api/createEvents")
+async def create_event(event: Event):
+    print(event) 
+    try:
+        query = f"""
+        CREATE (n:Event {{
+            date: '{event.date}', 
+            image: '{event.image}', 
+            start_time: '{event.start_time}', 
+            name: '{event.name}', 
+            end_time: '{event.end_time}', 
+            description: '{event.description}', 
+            location: '{event.location}', 
+            type: '{event.type}', 
+            long: '{event.long}', 
+            lat: '{event.lat}'
+        }}) RETURN n
+        """
+        
+        records, _, _ = driver.execute_query(query, database="neo4j")
+        return {"status": "ok", "event": records[0]}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
