@@ -1,17 +1,16 @@
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { MoveLeft } from 'lucide-react';
-import { Button } from "@/components/ui/button"
+import { MoveLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-
-function LogoutIcon({className}:any) {
+function LogoutIcon({ className }: any) {
   return (
-  <Button variant="ghost" size="icon" className={cn(className)}>
+    <Button variant="ghost" size="icon" className={cn(className)}>
       <MoveLeft className="h-8 w-8 dark:hover:bg-red-400 duration-300 rounded-sm" />
-  </Button>
-  )
+    </Button>
+  );
 }
 
 /* Hey, {user.email}! You are a {user.user_metadata.role}! */
@@ -34,7 +33,7 @@ export default async function AuthButton() {
   return user ? (
     <div className="flex items-center gap-4">
       <form action={signOut}>
-          <LogoutIcon className=""/>
+        <LogoutIcon className="" />
       </form>
     </div>
   ) : (

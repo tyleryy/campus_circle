@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,6 +37,7 @@ import {
 } from "./Map-Overlay";
 import profile from "@/app/profile.jpg";
 import { DrawerDemo } from "@/app/protected/drawer";
+import { useEffect, useState } from "react";
 
 function StudentCards({ image, text }) {
   return (
@@ -61,12 +62,16 @@ function StudentCards({ image, text }) {
 
 export async function TabsClubsEvents() {
   const supabase = createClient();
+  const [user, setUser] = useState(null);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  useEffect(() => {
+    if (supabase) {
+      const { user }: any = supabase.auth.getUser();
+      setUser(user);
+    }
+  }, []);
 
-  return user.user_metadata.role === "student" ? (
+  return user?.user_metadata.role === "student" ? (
     // Students
     <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">

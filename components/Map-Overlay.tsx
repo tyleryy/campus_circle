@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
 import { Check, ChevronsUpDown, Plus, Trophy, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

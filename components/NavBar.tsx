@@ -4,17 +4,17 @@ import { MapPinned } from "lucide-react";
 import { Calendar } from "lucide-react";
 import { Settings } from "lucide-react";
 import { CircleUser } from "lucide-react";
-import AuthButton from "@/components/AuthButtonServer";
+import AuthButton from "@/components/AuthButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ModeToggle } from "./dark-mode-toggle";
 import Image from "next/image";
 import logo from "../app/campus_circle_logo.png";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-
+import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -78,16 +78,24 @@ function ProfileIcon() {
   );
 }
 
-export default async function NavBar() {
+export default function NavBar() {
   const { day, month } = getCurrentDayAndMonth();
 
   const supabase = createClient();
+  const [user, setUser] = useState(null);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
-  return user.user_metadata.role === "student" ? (
+  useEffect(() => {
+    if (supabase) {
+      const { user }: any = supabase.auth.getUser();
+      setUser(user);
+    }
+  }, []);
+
+  return user?.user_metadata.role === "student" ? (
     <nav className="h-full w-full bg-slate-800 text-neutral-200 flex flex-col items-center">
       <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
@@ -112,9 +120,7 @@ export default async function NavBar() {
       >
         <CalIcon />
       </Link>
-      <Link href="/" className="py-6">
-        <AuthButton />
-      </Link>
+      <AuthButton />
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
           <ModeToggle />
@@ -132,7 +138,7 @@ export default async function NavBar() {
               Student
             </PopoverTrigger>
             <PopoverContent>
-              Hey, {user.email}! You are a {user.user_metadata.role}!
+              Hey, {user?.email}! You are a {user?.user_metadata.role}!
             </PopoverContent>
           </Popover>
         </Link>
@@ -194,7 +200,7 @@ export default async function NavBar() {
           <Popover>
             <PopoverTrigger className="text-sm font-bold">Club</PopoverTrigger>
             <PopoverContent>
-              Hey, {user.email}! You are a {user.user_metadata.role}!
+              Hey, {user?.email}! You are a {user?.user_metadata.role}!
             </PopoverContent>
           </Popover>
         </Link>

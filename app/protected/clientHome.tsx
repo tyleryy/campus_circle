@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import DeployButton from "@/components/DeployButton";
 import { useState } from "react";
@@ -7,8 +6,8 @@ import NavBar from "@/components/NavBar";
 import {
   CollapsibleEvents,
   CollapsibleInsights,
-  TabsClubsEvents,
 } from "@/components/Map-Overlay";
+import { TabsClubsEvents } from "@/components/StudentOrClub";
 import {
   ResizableHandle,
   ResizablePanel,

@@ -8,10 +8,6 @@ export default function AuthButton() {
   const supabase = createClient();
   const [user, setUser] = useState(null);
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
-
   useEffect(() => {
     if (supabase) {
       const { user }: any = supabase.auth.getUser();
