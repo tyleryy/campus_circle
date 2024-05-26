@@ -1,24 +1,76 @@
-import DeployButton from "../../components/DeployButton";
-import AuthButton from "../../components/AuthButton";
-import { createClient } from "@/utils/supabase/server";
-import Header from "@/components/Header";
+"use client";
 
-export default async function Index() {
-  const supabase = createClient();
-  const { data: notes } = await supabase.from("notes").select();
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-  const data = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/healthchecker`);
-  const more_data = await data.json();
+import { createClient } from "@supabase/supabase-js";
+
+// Create Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+// Upload file using standard upload
+async function uploadFile(file) {
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload("file", file);
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(data);
+  }
+}
+
+const formSchema = z.object({
+  file: typeof window === "undefined" ? z.any() : z.instanceof(FileList),
+});
+
+export default function Home() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+
+  const fileRef = form.register("file");
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    if (data.file) {
+      uploadFile(data.file[0]);
+    }
+  };
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-          <DeployButton />
-          <AuthButton />
-        </div>
-      </nav>
-      <pre>{JSON.stringify(notes, null, 2)}</pre>
-      <pre>{JSON.stringify(more_data)}</pre>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-10">
+        <FormField
+          control={form.control}
+          name="file"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>File</FormLabel>
+                <FormControl>
+                  <Input type="file" placeholder="shadcn" {...fileRef} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   );
 }
