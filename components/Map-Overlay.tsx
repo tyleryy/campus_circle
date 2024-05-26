@@ -20,6 +20,7 @@ import { Send } from "lucide-react";
 import ctc from "../app/ctc_logo.png";
 import hack from "../app/hack-at-uci-logo_black.png";
 import Image from "next/image";
+import { DrawerDemo } from "@/app/protected/drawer";
 
 import {
   Collapsible,
@@ -234,7 +235,7 @@ export function TabsClubsEvents() {
         <TabsTrigger value="account" className="font-semibold">
           Clubs
         </TabsTrigger>
-        <TabsTrigger value="password" className="font-semibold">
+        <TabsTrigger value="events" className="font-semibold">
           Events
         </TabsTrigger>
       </TabsList>
@@ -250,27 +251,18 @@ export function TabsClubsEvents() {
         </Card>
       </TabsContent>
 
-      <TabsContent value="password">
+      <TabsContent value="events">
         <Card>
           <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-              Change your password here. After saving, you'll be logged out.
-            </CardDescription>
+            <CardTitle>Events</CardTitle>
+            <CardDescription>List of Events</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
+            <DrawerDemo />
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <Button>Save password</Button>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       </TabsContent>
     </Tabs>
