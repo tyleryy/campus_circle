@@ -5,7 +5,7 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { createClient } from "@/utils/supabase/server";
 import { Separator } from "@/components/ui/separator";
-import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Trophy, X } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -276,6 +276,22 @@ export function InputWithButton() {
 
 export function CollapsibleInsights() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [topThree, setTopThree] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/topStudents`
+      );
+      const data = await response.json();
+      console.log("data:", data);
+      const topThreeData = data.events.flat().slice(0, 3);
+      console.log("top three users: ");
+      console.log(topThreeData);
+      setTopThree(topThreeData);
+    };
+    fetchData();
+  }, []);
 
   return (
     <Collapsible
@@ -296,11 +312,30 @@ export function CollapsibleInsights() {
         </CollapsibleTrigger>
       </div>
       <CollapsibleContent className="space-y-2">
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          INSERT HERE
+        <div className="rounded-md border-cyan-400 border-4 px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-cyan-400 flex justify-center">
+            1
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThree[0]}
+            <Trophy className="stroke-cyan-400" />
+          </div>
         </div>
-        <div className="rounded-md border px-4 py-3 font-mono text-sm text-white bg-slate-800">
-          INSERT HERE
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            2
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThree[1]}
+          </div>
+        </div>
+        <div className="rounded-md border px-4 py-3 text-sm text-white bg-slate-800 flex flex-row align-middle">
+          <div className="rounded-lg p-1 w-10 text-black bg-neutral-100 flex justify-center">
+            3
+          </div>
+          <div className="ml-3 gap-[140px] flex flex-row items-center">
+            {topThree[2]}
+          </div>
         </div>
       </CollapsibleContent>
     </Collapsible>
