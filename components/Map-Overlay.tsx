@@ -150,7 +150,7 @@ export function ScrollAreaClubs() {
 
 export function ScrollAreaEvents() {
   return (
-    <ScrollArea className="w-full rounded-md h-[500px] pb-36">
+    <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
       <EventCard
         image={humanities}
         day="25"
@@ -279,7 +279,7 @@ export function TabsClubsEvents() {
       </TabsContent>
 
       <TabsContent value="password" className="h-full">
-        <Card className="h-screen">
+        <Card className="h-[800px]">
           <CardHeader>
             <InputWithButton />
             <CheckBox />
