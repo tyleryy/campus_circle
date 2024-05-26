@@ -13,6 +13,8 @@ import logo from "../app/campus_circle_logo.png";
 import { createClient } from "@/utils/supabase/server";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+
 import {
   Popover,
   PopoverContent,
@@ -141,16 +143,21 @@ export default async function NavBar() {
       <Link href="#" className="pt-12 pb-6">
         <Image src={logo} alt="Logo" className="h-10 w-10" />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
       <div className="py-6 text-lg flex flex-col items-center">
         <span className="text-3xl">{day}</span>
         <span>{month}</span>
       </div>
+      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="/" className="py-6">
         <ButtonIcon />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
       <Link href="#" className="py-6">
         <UserIcon />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
+
       <Link
         href="https://calendar.google.com/"
         target="_blank"
@@ -158,19 +165,27 @@ export default async function NavBar() {
       >
         <MapIcon />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
+
       <Link href="#" className="py-6">
         <CalIcon />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
+
       <Link href="/" className="py-6">
         <AuthButton />
       </Link>
+      <Separator className="border-[0.5px] border-neutral-200" />
+
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
           <ModeToggle />
         </Link>
+
         <Link href="#" className="mb-6">
           <SettingsIcon />
         </Link>
+
         <Link
           href="#"
           className="mb-8 flex dark:hover:bg-blue-400 duration-300 rounded-sm pr-2 py-1"
