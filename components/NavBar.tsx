@@ -98,6 +98,10 @@ export default function NavBar() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // useEffect(() => {
+  //   console.log("session:", session);
+  // }, [session]);
+
   return session?.user.user_metadata?.role === "student" ? (
     <nav className="h-full w-full bg-slate-800 text-neutral-200 flex flex-col items-center">
       <Link href="#" className="pt-12 pb-6">
@@ -123,7 +127,7 @@ export default function NavBar() {
       >
         <CalIcon />
       </Link>
-      <AuthButton />
+      {/* <AuthButton /> */}
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">
           <ModeToggle />
@@ -182,8 +186,8 @@ export default function NavBar() {
       </Link>
       <Separator className="border-[0.5px] border-neutral-200" />
 
-      <AuthButton />
-      <Separator className="border-[0.5px] border-neutral-200" />
+      {/* <AuthButton /> */}
+      {/* <Separator className="border-[0.5px] border-neutral-200" /> */}
 
       <div className="mt-auto flex flex-col items-center">
         <Link href="#" className="mb-6">

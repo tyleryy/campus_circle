@@ -108,17 +108,29 @@ export default function Map() {
       lat: position.lat,
       long: position.lng,
     };
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pin),
-      }
-    );
-    const data = await response.json();
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pin),
+        }
+      );
+      const data = await response.json();
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
     // console.log("ping:", data);
   }
 
