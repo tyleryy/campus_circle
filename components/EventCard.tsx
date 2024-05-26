@@ -23,7 +23,7 @@ export default function EventCard({
 }) {
   return (
     <Card className="w-full mb-3 border-gray-600">
-      <Image src={image} alt="event image" className="rounded-t-lg"/>
+      <img src={image} alt="event image" className="rounded-t-lg" />
       <div className="flex flex-row items-center bg-slate-800 rounded-b-lg">
         <div className="ml-5 h-20 w-16 bg-slate-900 rounded-lg items-center flex flex-col justify-center">
           <h2 className="text-lg font-semibold">{day}</h2>

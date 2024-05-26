@@ -179,21 +179,86 @@ export function ScrollAreaStudents() {
   );
 }
 
-export function ScrollAreaEvents({ events }: any) {
+export function ScrollAreaEvents() {
+  const [events, setEvents] = useState([]);
+  // Map month numbers to month names
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
+      const data = await response.json();
+      const flattenedEvents = data.events.flat();
+      setEvents(flattenedEvents);
+    };
+    fetchData();
+  }, []);
   return (
     <ScrollArea className="w-full rounded-md pb-36 h-[800px]">
-      {events.map((event) => (
-        <EventCard
-          image={event.image}
-          day={event.day}
-          month={event.month}
-          title={event.title}
-          location={event.location}
-          weekday={event.weekday}
-          start={event.start}
-          end={event.end}
-        />
-      ))}
+      {events.map((event) => {
+        // Convert month string to an integer and map it to the corresponding month name
+        // Split the input date string into its components
+        const [month, day, year] = event.date.split("-");
+
+        // Create a Date object using the parsed date components
+        const date = new Date(`${year}-${month}-${day}`);
+
+        // Map month numbers to month names
+        const monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+
+        // Map weekday numbers to weekday names
+        const weekdayNames = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+
+        // Get the month name and weekday name
+        const monthName = monthNames[date.getMonth()];
+        const weekdayName = weekdayNames[date.getDay()];
+        return (
+          <EventCard
+            key={event.id}
+            image={event.image}
+            day={day}
+            month={monthName}
+            title={event.name}
+            location={event.location}
+            weekday={weekdayName}
+            start={event.start_time}
+            end={event.end_time}
+          />
+        );
+      })}
     </ScrollArea>
   );
 }

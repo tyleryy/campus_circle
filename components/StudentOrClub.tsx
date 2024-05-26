@@ -79,12 +79,6 @@ export async function TabsClubsEvents() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const student_config = [
-    { image: profile.src, text: "Alex Ngo" },
-    { image: profile.src, text: "Alex Ngo" },
-    { image: profile.src, text: "Alex Ngo" },
-  ];
-
   const config = [
     {
       image: humanities,
@@ -149,7 +143,7 @@ export async function TabsClubsEvents() {
             <CheckBox />
           </CardHeader>
           <CardContent className="h-screen">
-            <ScrollAreaEvents events={config} />
+            <ScrollAreaEvents />
           </CardContent>
         </Card>
       </TabsContent>
@@ -175,7 +169,7 @@ export async function TabsClubsEvents() {
             <InputWithButton />
           </CardHeader>
           <CardContent className="">
-            <ScrollAreaEvents events={config} />
+            <ScrollAreaEvents />
           </CardContent>
         </Card>
       </TabsContent>
