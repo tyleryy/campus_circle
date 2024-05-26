@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { use, useEffect, useState } from "react";
+import { Image } from "next/image";
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -26,7 +28,7 @@ const supabase = createClient(
 async function uploadFile(file) {
   const { data, error } = await supabase.storage
     .from("images")
-    .upload("file", file);
+    .upload(`${file.name}`, file, { upsert: true });
   if (error) {
     console.log(error);
   } else {
@@ -39,17 +41,27 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const [pic, setPic] = useState(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const fileRef = form.register("file");
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    if (data.file) {
-      uploadFile(data.file[0]);
+  const onSubmit = (submitData: z.infer<typeof formSchema>) => {
+    if (submitData.file) {
+      uploadFile(submitData.file[0]);
     }
+    const { data } = supabase.storage
+      .from("images")
+      .getPublicUrl(submitData.file[0].name);
+    console.log(data);
+    setPic(data.publicUrl);
   };
+
+  useEffect(() => {
+    console.log(pic);
+  }, [pic]);
 
   return (
     <Form {...form}>
@@ -69,6 +81,7 @@ export default function Home() {
             );
           }}
         />
+        {pic && <img src={pic} alt="uploaded" width={100} height={100} />}
         <Button type="submit">Submit</Button>
       </form>
     </Form>
