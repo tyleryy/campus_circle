@@ -347,9 +347,6 @@ export function DrawerDemo() {
                           />
                         </PopoverContent>
                       </Popover>
-                      <FormDescription>
-                        Your date of birth is used to calculate your age.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
