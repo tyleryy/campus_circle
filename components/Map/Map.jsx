@@ -59,6 +59,8 @@ export default function Map() {
     const handleFocus = async () => {
       setFocusLocation(null);
     };
+    // console.log("location");
+    // console.log(focusLocation);
 
     if (focusLocation) {
       handleFocus();
@@ -162,7 +164,12 @@ export default function Map() {
 
   function MapFocusLocation({ location }) {
     const map = useMap();
+
     if (location) {
+      if (location.lat === "" || location.lng === "") {
+        alert("Event doesn't have coordinates");
+        return;
+      }
       map.flyTo(
         {
           lat: parseFloat(location.lat) - 0.0008,

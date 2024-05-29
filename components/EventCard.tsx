@@ -31,7 +31,7 @@ export default function EventCard({
   long,
   email,
   role,
-  people,
+  people = [],
 }) {
   const [rsvpClicked, setRsvpClicked] = useState(false);
 
