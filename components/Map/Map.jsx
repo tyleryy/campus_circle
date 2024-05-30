@@ -150,6 +150,7 @@ export default function Map() {
       long: position.lng,
     };
     try {
+      console.log("Updating Event Location");
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/updateEventLocation/`,
         {

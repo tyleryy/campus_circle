@@ -164,7 +164,7 @@ async def create_event(event: Event):
         return HTTPException(status_code=400, detail=str(e))
     
 
-@app.post("/api/updateEventLocation/")
+@app.post("/api/updateEventLocation")
 async def update_event_location(pin: Pin):
     event_id = pin.event_id
     lat = pin.lat
@@ -179,7 +179,7 @@ async def update_event_location(pin: Pin):
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "event": records[0]}
     except Exception as e:
-        return HTTPException(status_code=400, detail=str(e))
+        return HTTPException(status_code=404, detail=str(e))
     
 @app.post("/api/updateClubInfo")
 async def update_club_info(club_info: ClubInfo):
