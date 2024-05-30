@@ -207,6 +207,9 @@ import { Description } from "@radix-ui/react-dialog";
 export function ScrollAreaEvents({ height }) {
   const [events, setEvents] = useState([]);
 
+  const supabase = createClient();
+  const [session, setSession] = useState(null);
+
   // Map month numbers to month names
   const monthNames = [
     "January",
@@ -225,16 +228,50 @@ export function ScrollAreaEvents({ height }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/events`);
-      const data = await response.json();
-      const flattenedEvents = data.events.flat();
-      setEvents(flattenedEvents);
+      if (session === undefined) return;
+
+      if (session?.user.user_metadata?.role === "student") {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/rsvp-events`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: session?.user.email }),
+          }
+        );
+        const data = await response.json();
+
+        let events = data.event.map((event) => {
+          const e = event[0];
+          return {
+            id: event[2],
+            rsvp: event[1],
+            name: e.name,
+            description: e.description,
+            location: e.location,
+            date: e.date,
+            start_time: e.start_time,
+            end_time: e.end_time,
+            image: e.image,
+            lat: e.lat,
+            long: e.long,
+            people: e.people,
+          };
+        });
+        setEvents(events);
+      } else if (session?.user.user_metadata?.role === "club") {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/events`
+        );
+        const data = await response.json();
+        const flattenedEvents = data.events.flat();
+        setEvents(flattenedEvents);
+      }
     };
     fetchData();
-  }, []);
-
-  const supabase = createClient();
-  const [session, setSession] = useState(null);
+  }, [session]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -256,7 +293,6 @@ export function ScrollAreaEvents({ height }) {
       style={{ height: `${height}px` }}
     >
       {events.map((event) => {
-        // console.log(event);
         // Convert month string to an integer and map it to the corresponding month name
         const [month, day, year] = event.date.split("-");
         const date = new Date(`${year}-${month}-${day}`);
@@ -274,6 +310,8 @@ export function ScrollAreaEvents({ height }) {
         return (
           <EventCard
             key={event.id}
+            id={event.id}
+            rsvp={event.rsvp}
             image={event.image}
             day={day}
             month={monthName}

@@ -18,7 +18,9 @@ import { Description } from "@radix-ui/react-dialog";
 import DataContext from "@/app/context/DataContext";
 
 export default function EventCard({
+  id,
   image,
+  rsvp,
   day,
   month,
   title,
@@ -33,12 +35,15 @@ export default function EventCard({
   role,
   people = [],
 }) {
-  const [rsvpClicked, setRsvpClicked] = useState(false);
+  const [rsvpClicked, setRsvpClicked] = useState(rsvp);
+
+  // useEffect(() => {
+  //   console.log(rsvp);
+  // }, [rsvp]);
 
   const { setFocusLocation } = useContext(DataContext);
 
   const handleRsvpClick = () => {
-    setRsvpClicked(true);
     onSubmit();
   };
   // console.log(email, title);
@@ -56,24 +61,36 @@ export default function EventCard({
   const onSubmit = async () => {
     const rsvp = {
       email: email,
-      event_name: title,
+      event_id: parseInt(id),
     };
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rsvp/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rsvp),
-    });
-    const data = await response.json();
-    // console.log(data);
+    if (!rsvpClicked) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rsvp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(rsvp),
+      });
+      const data = await response.json();
+      setRsvpClicked(true);
+      // console.log(data);
+    } else {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/unrsvp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(rsvp),
+        }
+      );
+      const data = await response.json();
+      setRsvpClicked(false);
+      // console.log(data);
+    }
     // setIsOpen(false);
   };
-
-  useEffect(() => {
-    const d = people.includes(email);
-    setRsvpClicked(d);
-  }, [email, people]);
 
   // console.log(people, email, rsvpClicked);
 
