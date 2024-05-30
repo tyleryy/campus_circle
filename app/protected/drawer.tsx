@@ -59,7 +59,7 @@ const supabase = createClient();
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
-  description: z.string().min(2).max(50),
+  description: z.string().min(2),
   date: z.date(),
   startTime: z.string(),
   endTime: z.string(),
@@ -113,6 +113,7 @@ export function DrawerDemo() {
       longitude: "",
       latitude: "",
       eventType: "",
+      image: "",
     },
   });
 
@@ -159,6 +160,7 @@ export function DrawerDemo() {
       );
 
       const result = await response.json();
+      console.log("result", result);
       setEventId(result.event[0]);
       setIsEdit(true);
       setIsOpen(false);
