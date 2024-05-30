@@ -85,17 +85,17 @@ export function TabsClubsEvents() {
   return session?.user_metadata?.role ||
     session?.user.user_metadata?.role === "student" ? (
     // Students
-    <Tabs defaultValue="account" className="w-[350px] bg-slate-800 rounded-lg">
+    <Tabs defaultValue="clubs" className="w-[350px] bg-slate-800 rounded-lg">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="account" className="font-semibold">
+        <TabsTrigger value="clubs" className="font-semibold">
           Clubs
         </TabsTrigger>
-        <TabsTrigger value="password" className="font-semibold">
+        <TabsTrigger value="events" className="font-semibold">
           Events
         </TabsTrigger>
       </TabsList>
       {/* 2 tabs */}
-      <TabsContent value="account" className="">
+      <TabsContent value="clubs" className="">
         <Card className="">
           <CardHeader>
             <InputWithButton />
@@ -107,7 +107,7 @@ export function TabsClubsEvents() {
         </Card>
       </TabsContent>
 
-      <TabsContent value="password" className="">
+      <TabsContent value="events" className="">
         <Card className="">
           <CardHeader>
             <InputWithButton />
