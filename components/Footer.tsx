@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-between items-center text-center text-xs">
       <p className="relative justify-center">
-        Made with ❤️ by <a className="text-blue-400">CampusCompass</a>
+        Made with ❤️ by <a className="text-blue-400">CampusCircle</a>
       </p>
       <div className="relative justify-end">
         <ModeToggle />

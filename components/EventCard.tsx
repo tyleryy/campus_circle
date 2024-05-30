@@ -31,7 +31,7 @@ export default function EventCard({
   long,
   email,
   role,
-  people,
+  people = [],
 }) {
   const [rsvpClicked, setRsvpClicked] = useState(false);
 
@@ -93,8 +93,8 @@ export default function EventCard({
         <CardHeader>
           <Popover>
             <PopoverTrigger>
-              <CardTitle className="text-left flex flex-row">
-                {title} <SquareArrowOutUpRight />{" "}
+              <CardTitle className="text-left flex flex-row hover:underline-offset-1 hover:underline">
+                {title}
               </CardTitle>
             </PopoverTrigger>
             <PopoverContent className="rounded-2xl w-96 absolute -bottom-[200px] border-gray-600 border translate-x-[145px]">

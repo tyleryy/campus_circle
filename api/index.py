@@ -153,26 +153,11 @@ async def get_students():
 
 @app.post("/api/createEvents")
 async def create_event(event: Event):
-    print(event) 
+    print(dict(event)) 
     try:
-        query = f"\
-        CREATE (n:Event {{\
-            date: '{event.date}',\
-            image: '{event.image}', \
-            start_time: '{event.start_time}', \
-            name: '{event.name}', \
-            end_time: '{event.end_time}', \
-            description: '{event.description}', \
-            location: '{event.location}', \
-            type: '{event.type}', \
-            long: '{event.long}', \
-            lat: '{event.lat}', \
-            email: '{event.email}', \
-            people: []\
-        }})<-[r:RUNNING]-(c:Club {{email: '{event.email}'}}) RETURN ID(n) \
-        "
+        query = r"CREATE (n:Event {name: $name, description: $description, date: $date, start_time: $start_time, end_time: $end_time, location: $location, long: $long, lat: $lat, type: $type, image: $image, email: $email}) RETURN ID(n)"
         
-        records, _, _ = driver.execute_query(query, database="neo4j")
+        records, _, _ = driver.execute_query(query, parameters_=dict(event), database="neo4j")
         return {"status": "ok", "event": records[0]}
     except Exception as e:
         return {"status": "error", "error": str(e)}

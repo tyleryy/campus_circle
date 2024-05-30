@@ -29,6 +29,26 @@ import {
   useMapEvents,
   useMap,
 } from "react-leaflet";
+import { toast } from "sonner";
+
+function Sonner() {
+  return (
+    <Button
+      variant="outline"
+      onClick={() =>
+        toast("Event has been created", {
+          description: "Sunday, December 03, 2023 at 9:00 AM",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+        })
+      }
+    >
+      Show Toast
+    </Button>
+  );
+}
 
 export default function Map() {
   const centerPosition = { lat: 33.6461, lng: -117.8427 };
@@ -59,6 +79,8 @@ export default function Map() {
     const handleFocus = async () => {
       setFocusLocation(null);
     };
+    // console.log("location");
+    // console.log(focusLocation);
 
     if (focusLocation) {
       handleFocus();
@@ -162,7 +184,14 @@ export default function Map() {
 
   function MapFocusLocation({ location }) {
     const map = useMap();
+
     if (location) {
+      if (location.lat === "" || location.lng === "") {
+        toast("Event has no latitude and longitude coordinates.", {
+          className: "bg-slate-800 text-neutral-200",
+        });
+        return;
+      }
       map.flyTo(
         {
           lat: parseFloat(location.lat) - 0.0008,
