@@ -41,7 +41,7 @@ export default function EventCard({
     setRsvpClicked(true);
     onSubmit();
   };
-  console.log(email, title);
+  // console.log(email, title);
 
   const allPeople = people.map((person) => {
     return (
@@ -66,7 +66,7 @@ export default function EventCard({
       body: JSON.stringify(rsvp),
     });
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     // setIsOpen(false);
   };
 
@@ -75,7 +75,7 @@ export default function EventCard({
     setRsvpClicked(d);
   }, [email, people]);
 
-  console.log(people, email, rsvpClicked);
+  // console.log(people, email, rsvpClicked);
 
   return (
     <Card

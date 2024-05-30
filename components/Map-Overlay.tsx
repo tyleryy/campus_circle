@@ -138,7 +138,7 @@ export function ScrollAreaCards() {
     fetchData();
   }, []);
 
-  console.log(clubs);
+  // console.log(clubs);
   const allClubs: JSX.Element[] = clubs.map((club) => (
     <ClubCards
       key={club.email}
@@ -256,7 +256,7 @@ export function ScrollAreaEvents({ height }) {
       style={{ height: `${height}px` }}
     >
       {events.map((event) => {
-        console.log(event);
+        // console.log(event);
         // Convert month string to an integer and map it to the corresponding month name
         const [month, day, year] = event.date.split("-");
         const date = new Date(`${year}-${month}-${day}`);

@@ -31,7 +31,7 @@ async function uploadFile(file) {
   if (error) {
     console.log(error);
   } else {
-    console.log(data);
+    // console.log(data);
   }
 }
 
@@ -54,13 +54,13 @@ export default function Home() {
     const { data } = supabase.storage
       .from("images")
       .getPublicUrl(submitData.file[0].name);
-    console.log(data);
+    // console.log(data);
     setPic(data.publicUrl);
   };
 
-  useEffect(() => {
-    console.log(pic);
-  }, [pic]);
+  // useEffect(() => {
+  //   console.log(pic);
+  // }, [pic]);
 
   return (
     <Form {...form}>

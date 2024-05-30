@@ -78,9 +78,9 @@ export function TabsClubsEvents() {
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
+  // useEffect(() => {
+  //   console.log(session);
+  // }, [session]);
 
   return session?.user_metadata?.role ||
     session?.user.user_metadata?.role === "student" ? (
