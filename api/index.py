@@ -71,11 +71,10 @@ class StudentInfo(BaseModel):
     club_description: str
     image_url: str
 
-class RSVP(BaseModel):
-    email: str
-    event_name: str
+# class RSVP(BaseModel):
+#     email: str
+#     event_name: str
 
-    
 # redirect only occurs if path extends /api (ex. /api/healthchecker (:path) )
 @app.get("/api/healthchecker")
 async def health():
@@ -99,7 +98,7 @@ async def create_user(user: User):
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "user": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)} 
+        return HTTPException(status_code=400, detail=str(e))
     
 @app.get("/api/events")
 async def get_events():
@@ -108,7 +107,7 @@ async def get_events():
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
     
  
 @app.get("/api/students")
@@ -118,7 +117,7 @@ async def get_students():
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
     
 
 @app.get("/api/topStudents")
@@ -128,7 +127,7 @@ async def get_students():
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
     
 
 @app.get("/api/clubs")
@@ -138,7 +137,7 @@ async def get_events():
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
 
 
 @app.get("/api/topClubs")
@@ -148,20 +147,21 @@ async def get_students():
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "events": list(records)}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
 
 
 @app.post("/api/createEvents")
 async def create_event(event: Event):
-    print(dict(event)) 
     try:
-        query = r"CREATE (n:Event {name: $name, description: $description, date: $date, start_time: $start_time, end_time: $end_time, location: $location, long: $long, lat: $lat, type: $type, image: $image, email: $email}) RETURN ID(n)"
-        # <-[r:RUNNING]-(c:Club {{email: '{event.email}'}})
+        query = r"CREATE (n:Event {name: $name, description: $description, date: $date, start_time: $start_time,\
+        end_time: $end_time, location: $location, long: $long, lat: $lat, type: $type, image: $image, email: $email})\
+        <-[r:RUNNING]-(c:Club {email: $email})\
+        RETURN ID(n)"
         
         records, _, _ = driver.execute_query(query, parameters_=dict(event), database="neo4j")
         return {"status": "ok", "event": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
     
 
 @app.post("/api/updateEventLocation")
@@ -198,7 +198,7 @@ async def update_club_info(club_info: ClubInfo):
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "club": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
 
 @app.post("/api/updateStudentInfo")
 async def update_student_info(student_info: StudentInfo):
@@ -217,21 +217,75 @@ async def update_student_info(student_info: StudentInfo):
         records, _, _ = driver.execute_query(query, database="neo4j")
         return {"status": "ok", "student": records[0]}
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
     
+
+# @app.post("/api/rsvp")
+# async def rsvp(rsvp: RSVP):
+#     email = rsvp.email
+#     event_name = rsvp.event_name
+#     try:
+#         query = f"""
+#         MATCH (e:Event)
+#         WHERE e.name = '{event_name}'
+#         SET e.people = COALESCE(e.people, []) + ['{email}']
+#         RETURN e
+#         """
+#         records, _, _ = driver.execute_query(query, database="neo4j")
+#         return {"status": "ok", "event": records[0]}
+#     except Exception as e:
+#         return HTTPException(status_code=400, detail=str(e))
+
+
+class RSVP(BaseModel):
+    email: str
+    event_id: int
 
 @app.post("/api/rsvp")
 async def rsvp(rsvp: RSVP):
-    email = rsvp.email
-    event_name = rsvp.event_name
     try:
-        query = f"""
-        MATCH (e:Event)
-        WHERE e.name = '{event_name}'
-        SET e.people = COALESCE(e.people, []) + ['{email}']
-        RETURN e
+        query = r"""
+        match (s:Student {email: $email})
+        match (e:Event) where ID(e) = $event_id
+        create (s)-[r:RSVP]->(e)
         """
-        records, _, _ = driver.execute_query(query, database="neo4j")
-        return {"status": "ok", "event": records[0]}
+        records, summary, _ = driver.execute_query(query, database="neo4j", parameters_=dict(rsvp))
+        # print("Query `{query}` returned {records_count} records in {time} ms.".format(
+        #     query=summary.query, records_count=len(records),
+        #     time=summary.result_available_after
+        # ))
+        return {"status": "ok", "event": records}
+    
     except Exception as e:
-        return {"status": "error", "error": str(e)}
+        return HTTPException(status_code=400, detail=str(e))
+
+@app.post("/api/unrsvp")
+async def rsvp(rsvp: RSVP):
+    try:
+        query = r"""   
+        match (s:Student {email: $email})-[r:RSVP]->(e:Event)
+        where ID(e) = $event_id
+        delete r
+        """
+        records, summary, _ = driver.execute_query(query, database="neo4j", parameters_=dict(rsvp))
+        # print("Query `{query}` returned {records_count} records in {time} ms.".format(
+        #     query=summary.query, records_count=len(records),
+        #     time=summary.result_available_after
+        # ))
+        return {"status": "ok", "event": records}
+    
+    except Exception as e:
+        return HTTPException(status_code=400, detail=str(e))
+class GetRSVP(BaseModel):
+    email: str
+
+@app.post("/api/rsvp-events")
+async def rsvp(getRSVP: GetRSVP):
+    try:
+        query = r"""MATCH (e:Event)
+            OPTIONAL MATCH (e)<-[r:RSVP]-(:Student {email: $email})
+            return e, r is NOT NULL as rsvp, ID(e) as id"""
+        records, _, _ = driver.execute_query(query, database="neo4j", parameters_=dict(getRSVP))
+        return {"status": "ok", "event": records}
+    except Exception as e:
+        return HTTPException(status_code=400, detail=str(e))
