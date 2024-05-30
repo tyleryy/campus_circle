@@ -6,6 +6,7 @@ import React from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -38,6 +39,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
