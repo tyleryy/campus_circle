@@ -168,7 +168,8 @@ export default function Map() {
     if (location) {
       if (location.lat === "" || location.lng === "") {
         alert("Event doesn't have coordinates");
-        return;
+        setIsEdit(!isEdit);
+        return <></>;
       }
       map.flyTo(
         {
