@@ -23,7 +23,7 @@ async function uploadFile(file) {
   if (error) {
     console.log(error);
   } else {
-    console.log(data);
+    // console.log(data);
     return data;
   }
 }
@@ -50,7 +50,7 @@ export default function ClubDialog({
         const { data } = supabase.storage
           .from("images")
           .getPublicUrl(uploadData.path);
-        console.log(data);
+        // console.log(data);
         setPic(data.publicUrl);
       }
     }
@@ -73,7 +73,7 @@ export default function ClubDialog({
       }
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     setIsOpen(false);
   };
 

@@ -138,7 +138,7 @@ export function ScrollAreaCards() {
     fetchData();
   }, []);
 
-  console.log(clubs);
+  // console.log(clubs);
   const allClubs: JSX.Element[] = clubs.map((club) => (
     <ClubCards
       key={club.email}
